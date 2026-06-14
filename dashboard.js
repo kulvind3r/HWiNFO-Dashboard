@@ -11,6 +11,7 @@ const SERVER_URL = 'http://10.0.0.1:9000/json.json';
 /**
  * Initialize all dashboard widgets
  */
+
 function initWidgets() {
     new VerticalBarGraph('#widget-ram-usage', {
         name: 'ram-usage',
@@ -28,34 +29,6 @@ function initWidgets() {
         rightReading: 'Physical Memory Available'
     });
 
-    new VerticalBarGraph('#widget-cpu-usage', {
-        name: 'cpu-usage',
-        label: 'CPU Usage',
-        reading: 'CPU Usage',
-        invertColors: false,
-        unit: '%',
-        min: 0,
-        max: 100
-    });
-
-    new VerticalBarGraph('#widget-cpu-temp', {
-        name: 'cpu-temp',
-        label: 'CPU Temp',
-        reading: 'CPU Temp',
-        invertColors: false,
-        unit: '°C',
-        min: 0,
-        max: 70
-    });
-
-    new SpeedometerGauge('#widget-cpu-clock', {
-        name: 'cpu-clock',
-        label: 'CPU Speed',
-        reading: 'Core 0 Clock',
-        unit: 'MHz',
-        max: 2560
-    });
-
     new VerticalBarGraph('#widget-battery-charge', {
         name: 'battery-charge',
         label: 'Battery',
@@ -66,27 +39,68 @@ function initWidgets() {
         max: 100
     });
 
-    new VerticalBarGraph('#widget-gpu-usage', {
-        name: 'gpu-usage',
-        label: 'GPU Usage',
-        reading: 'GPU D3D Usage',
-        invertColors: false,
-        unit: '%',
-        min: 0,
-        max: 100
-    });
-
-    new SpeedometerGauge('#widget-gpu-clock', {
-        name: 'gpu-clock',
-        label: 'GPU Speed',
-        reading: 'GPU Clock',
-        unit: 'MHz',
-        max: 800
-    });
+    
 
     // Initialize all registered widgets
     WidgetRegistry.getAll().forEach(w => w.init());
 }
+
+const gpuUsageWidget = new VerticalBarGraph('#widget-gpu-usage', {
+    name: 'gpu-usage',
+    label: 'GPU Usage',
+    reading: 'GPU D3D Usage',
+    invertColors: false,
+    unit: '%',
+    min: 0,
+    max: 100
+});
+
+const gpuClockWidget = new SpeedometerGauge('#widget-gpu-clock', {
+    name: 'gpu-clock',
+    label: 'GPU Speed',
+    reading: 'GPU Clock',
+    unit: 'MHz',
+    max: 800
+});
+
+const gpuCard = new Card('#gpu-card', {title: 'GPU Stats'});
+gpuCard.addWidget(gpuUsageWidget);
+gpuCard.addWidget(gpuClockWidget);
+gpuCard.init();
+
+const cpuUsageWidget = new VerticalBarGraph('#widget-cpu-usage', {
+    name: 'cpu-usage',
+    label: 'CPU Usage',
+    reading: 'CPU Usage',
+    invertColors: false,
+    unit: '%',
+    min: 0,
+    max: 100
+});
+
+const cpuTempWidget = new VerticalBarGraph('#widget-cpu-temp', {
+    name: 'cpu-temp',
+    label: 'CPU Temp',
+    reading: 'CPU Temp',
+    invertColors: false,
+    unit: '°C',
+    min: 0,
+    max: 70
+});
+
+const cpuClockWidget = new SpeedometerGauge('#widget-cpu-clock', {
+    name: 'cpu-clock',
+    label: 'CPU Speed',
+    reading: 'Core 0 Clock',
+    unit: 'MHz',
+    max: 2560
+});
+
+const cpuCard = new Card('#cpu-card', {title: 'CPU Stats'});
+cpuCard.addWidget(cpuClockWidget);
+cpuCard.addWidget(cpuUsageWidget);
+cpuCard.addWidget(cpuTempWidget);
+cpuCard.init();
 
 /**
  * Fetch sensor data from the server

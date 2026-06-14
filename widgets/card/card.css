@@ -1,0 +1,97 @@
+/**
+ * Card Widget Styles
+ * 
+ * Handles layout for 2, 3, and 4 widget configurations.
+ */
+
+.card-widget {
+    background: #16162a;
+    border: 1px solid #2a2a3e;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    width: fit-content;
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #2a2a3e;
+    text-align: center;
+}
+
+.card-content {
+    display: flex;
+    gap: 16px;
+}
+
+.card-widget-slot {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Error state */
+.card-error {
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-error-message {
+    color: #ff5252;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Layout for 2 widgets - side by side, 50% each */
+.card-layout-2 .card-widget-slot {
+    flex: 1;
+}
+
+/* Layout for 3 widgets - left 50%, right 50% split vertically */
+.card-layout-3 {
+    display: flex;
+    flex-direction: row;
+}
+
+.card-layout-3 .card-slot-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-layout-3 .card-slot-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.card-layout-3 .card-slot-right-top {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-layout-3 .card-slot-right-bottom {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Layout for 4 widgets - quadrant layout, 25% each */
+.card-layout-4 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 16px;
+}
+
+.card-layout-4 .card-widget-slot {
+    display: flex;
+    flex-direction: column;
+}

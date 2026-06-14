@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="widgets/vertical-bar-graph/vertical-bar-graph.css">
     <link rel="stylesheet" href="widgets/speedometer-gauge/speedometer-gauge.css">
+    <link rel="stylesheet" href="widgets/card/card.css">
 </head>
 <body>
 
@@ -20,23 +21,17 @@
             </label>
         </div>
     </div>
-
     <div class="dashboard-grid" id="dashboard">
         <div id="widget-ram-usage"></div>
-        <div id="widget-cpu-usage"></div>
-        <div id="widget-cpu-temp"></div>
-        <div id="widget-cpu-clock"></div>
-        
-    </div>
-    <div class="dashboard-grid" id="dashboard">
-        <div id="widget-gpu-usage"></div>
-        <div id="widget-gpu-clock"></div>
         <div id="widget-battery-charge"></div>
+        <div id="gpu-card"></div>
+        <div id="cpu-card"></div>
     </div>
 
     <script src="widgets/WidgetBase.js"></script>
     <script src="widgets/vertical-bar-graph/vertical-bar-graph.js"></script>
     <script src="widgets/speedometer-gauge/speedometer-gauge.js"></script>
+    <script src="widgets/card/card.js"></script>
     <script src="dashboard.js"></script>
 </body>
 </html>
