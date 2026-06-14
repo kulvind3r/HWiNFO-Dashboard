@@ -17,10 +17,19 @@
     <div class="dashboard-header">
         <h1>Acer Aspire R3 - 131T</h1>
         <div class="dashboard-controls">
+            <div class="dashboard-settings">
+                <label for="server-url">HWiNFO Data Server URL:</label>
+                <input type="text" id="server-url" placeholder="http://10.0.0.1:9000/json.json" value="http://10.0.0.1:9000/json.json">
+            </div>
+            <div class="dashboard-settings">
+                <label for="refresh-interval">Refresh Interval (s):</label>
+                <input type="number" id="refresh-interval" min="1" value="5" style="width:60px;">
+            </div>
+            <button id="apply-settings" onclick="applySettings()">Apply</button>
             <button id="refresh-btn" onclick="fetchData()">Refresh</button>
             <label class="auto-refresh-label">
                 <input type="checkbox" id="auto-refresh" checked>
-                Auto-refresh (5s)
+               Auto-refresh
             </label>
         </div>
     </div>

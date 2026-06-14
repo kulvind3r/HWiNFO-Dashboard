@@ -66,6 +66,46 @@ body {
     cursor: pointer;
 }
 
+.dashboard-settings {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dashboard-settings label {
+    font-size: 14px;
+    color: #888;
+    white-space: nowrap;
+}
+
+.dashboard-settings input {
+    padding: 6px 10px;
+    background: #2a2a3e;
+    color: #e0e0e0;
+    border: 1px solid #3a3a5e;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.dashboard-settings input::placeholder {
+    color: #666;
+}
+
+#apply-settings {
+    padding: 8px 20px;
+    background: #4CAF50;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+#apply-settings:hover {
+    background: #45a049;
+}
+
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

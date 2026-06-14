@@ -5,12 +5,50 @@
  * Automatically updates all registered widgets by passing the server data.
  */
 
-// Server configuration
-const SERVER_URL = 'http://10.0.0.1:9000/json.json';
+// Server configuration - now configurable via UI
+let serverURL = 'http://10.0.0.1:9000/json.json';
+let refreshIntervalSeconds = 3;
 
 /**
- * Initialize all dashboard widgets
+ * Apply settings from the UI input fields
  */
+function applySettings() {
+    const urlInput = document.getElementById('server-url');
+    const intervalInput = document.getElementById('refresh-interval');
+    const statusEl = document.getElementById('dashboard-status');
+    
+    // Update server URL
+    if (urlInput && urlInput.value.trim()) {
+        serverURL = urlInput.value.trim();
+    }
+    
+    // Update refresh interval
+    if (intervalInput && intervalInput.value) {
+        const interval = parseInt(intervalInput.value, 10);
+        if (interval >= 1) {
+            refreshIntervalSeconds = interval;
+        }
+    }
+    
+    // Restart auto-refresh if enabled
+    const autoRefreshCheckbox = document.getElementById('auto-refresh');
+    if (autoRefreshCheckbox && autoRefreshCheckbox.checked) {
+        startAutoRefresh();
+    }
+    
+    // Fetch data with new settings
+    fetchData();
+    
+    // Show confirmation
+    if (statusEl) {
+        statusEl.textContent = `Settings applied. Server: ${serverURL}, Interval: ${refreshIntervalSeconds}s`;
+        statusEl.className = 'dashboard-status success';
+    }
+}
+
+/**
+  * Initialize all dashboard widgets
+  */
 
 function initWidgets() {
     new VerticalBarGraph('#widget-ram-usage', {
@@ -154,10 +192,10 @@ async function fetchData() {
     const statusEl = document.getElementById('dashboard-status');
     
     try {
-        const response = await fetch(SERVER_URL);
+        const response = await fetch(serverURL);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
-         }
+          }
         
         const data = await response.json();
         updateDashboard(data);
@@ -165,14 +203,14 @@ async function fetchData() {
         if (statusEl) {
             statusEl.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
             statusEl.className = 'dashboard-status success';
-         }
-    } catch (error) {
+          }
+     } catch (error) {
         console.error('Failed to fetch data:', error);
         if (statusEl) {
             statusEl.textContent = `Error: ${error.message}`;
             statusEl.className = 'dashboard-status error';
-         }
-    }
+          }
+     }
 }
 
 /**
@@ -187,8 +225,27 @@ function updateDashboard(data) {
 }
 
 /**
- * Initialize the dashboard
- */
+   * Auto-refresh control (module-level for accessibility by applySettings)
+   */
+let refreshIntervalTimer = null;
+
+function startAutoRefresh() {
+    if (refreshIntervalTimer) clearInterval(refreshIntervalTimer);
+    refreshIntervalTimer = setInterval(() => {
+        fetchData();
+    }, refreshIntervalSeconds * 1000); // Refresh using configurable interval
+}
+
+function stopAutoRefresh() {
+    if (refreshIntervalTimer) {
+        clearInterval(refreshIntervalTimer);
+        refreshIntervalTimer = null;
+    }
+}
+
+/**
+   * Initialize the dashboard
+   */
 function initDashboard() {
      // Initialize widgets
     initWidgets();
@@ -198,21 +255,6 @@ function initDashboard() {
     
      // Setup auto-refresh
     const autoRefreshCheckbox = document.getElementById('auto-refresh');
-    let refreshInterval = null;
-    
-    function startAutoRefresh() {
-        if (refreshInterval) clearInterval(refreshInterval);
-        refreshInterval = setInterval(() => {
-            fetchData();
-         }, 5000); // Refresh every 5 seconds
-    }
-    
-    function stopAutoRefresh() {
-        if (refreshInterval) {
-            clearInterval(refreshInterval);
-            refreshInterval = null;
-         }
-    }
     
     if (autoRefreshCheckbox) {
         if (autoRefreshCheckbox.checked) {
@@ -226,7 +268,7 @@ function initDashboard() {
                 stopAutoRefresh();
              }
          });
-    }
+     }
 }
 
 // Initialize when DOM is ready
