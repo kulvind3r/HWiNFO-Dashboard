@@ -1,0 +1,134 @@
+/**
+ * VerticalBarGraph Widget Styles
+ * A vertical bar graph with color-coded fill levels.
+ */
+
+.vbg-widget {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    background: #1a1a2e;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    min-width: 120px;
+    min-height: 200px;
+}
+
+.vbg-widget .vbg-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e0e0e0;
+    margin-bottom: 12px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.vbg-widget .vbg-graph-container {
+    position: relative;
+    width: 60px;
+    height: 150px;
+    background: #0f0f1a;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid #2a2a3e;
+}
+
+.vbg-widget .vbg-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    border-radius: 0 0 6px 6px;
+    transition: height 0.6s ease, background 0.6s ease;
+}
+
+.vbg-widget .vbg-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    text-align: center;
+    margin-top: 8px;
+}
+
+/* Color classes for the bar */
+.vbg-bar.color-green {
+    background: linear-gradient(to top, #00c853, #69f0ae);
+}
+
+.vbg-bar.color-yellow {
+    background: linear-gradient(to top, #ffd600, #ffff52);
+}
+
+.vbg-bar.color-red {
+    background: linear-gradient(to top, #ff1744, #ff5252);
+}
+
+/* Inverted color scheme */
+.vbg-widget.inverted .vbg-bar.color-green {
+    background: linear-gradient(to top, #00c853, #69f0ae);
+}
+
+.vbg-widget.inverted .vbg-bar.color-yellow {
+    background: linear-gradient(to top, #ffd600, #ffff52);
+}
+
+.vbg-widget.inverted .vbg-bar.color-red {
+    background: linear-gradient(to top, #ff1744, #ff5252);
+}
+
+/* Grid lines on the bar graph */
+.vbg-widget .vbg-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.vbg-widget .vbg-grid-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Text fields container */
+.vbg-widget .vbg-text-fields-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 8px;
+    margin-bottom: 8px;
+}
+
+/* Individual text field */
+.vbg-widget .vbg-text-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Text field label - same style as widget label */
+.vbg-widget .vbg-text-field-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e0e0e0;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Text field value - less emphasis than label */
+.vbg-widget .vbg-text-field-value {
+    font-size: 12px;
+    font-weight: 400;
+    color: #a0a0a0;
+    text-align: center;
+    margin-top: 2px;
+}

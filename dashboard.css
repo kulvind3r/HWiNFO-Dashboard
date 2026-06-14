@@ -1,0 +1,97 @@
+/**
+ * Dashboard Global Styles
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0d0d1a;
+    color: #e0e0e0;
+    min-height: 100vh;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background: #16162a;
+    border-bottom: 2px solid #2a2a3e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+.dashboard-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+#refresh-btn {
+    padding: 8px 20px;
+    background: #2a2a3e;
+    color: #e0e0e0;
+    border: 1px solid #3a3a5e;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+#refresh-btn:hover {
+    background: #3a3a5e;
+}
+
+.auto-refresh-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #888;
+    cursor: pointer;
+}
+
+.auto-refresh-label input {
+    cursor: pointer;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 0.3fr));
+    gap: 20px;
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Loading state */
+.dashboard-grid.loading .vbg-widget {
+    opacity: 0.5;
+}
+
+/* Status bar */
+.dashboard-status {
+    text-align: center;
+    padding: 10px;
+    font-size: 12px;
+    color: #666;
+}
+
+.dashboard-status.error {
+    color: #ff5252;
+}
+
+.dashboard-status.success {
+    color: #69f0ae;
+}

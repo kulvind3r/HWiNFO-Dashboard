@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HWInfo Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="widgets/vertical-bar-graph/vertical-bar-graph.css">
+    <link rel="stylesheet" href="widgets/speedometer-gauge/speedometer-gauge.css">
+</head>
+<body>
+
+    <div class="dashboard-header">
+        <h1>HWInfo Dashboard</h1>
+        <div class="dashboard-controls">
+            <button id="refresh-btn" onclick="fetchData()">Refresh</button>
+            <label class="auto-refresh-label">
+                <input type="checkbox" id="auto-refresh" checked>
+                Auto-refresh (5s)
+            </label>
+        </div>
+    </div>
+
+    <div class="dashboard-grid" id="dashboard">
+        <div id="widget-ram-usage"></div>
+        <div id="widget-cpu-usage"></div>
+        <div id="widget-cpu-temp"></div>
+        <div id="widget-cpu-clock"></div>
+        
+    </div>
+    <div class="dashboard-grid" id="dashboard">
+        <div id="widget-gpu-usage"></div>
+        <div id="widget-gpu-clock"></div>
+        <div id="widget-battery-charge"></div>
+    </div>
+
+    <script src="widgets/WidgetBase.js"></script>
+    <script src="widgets/vertical-bar-graph/vertical-bar-graph.js"></script>
+    <script src="widgets/speedometer-gauge/speedometer-gauge.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
