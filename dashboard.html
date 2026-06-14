@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HWInfo Dashboard</title>
+    <title>Acer Aspire R3 - 131T</title>
     <link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAEBAQAAEABAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAADy8vIAFxcXAP7+/gC/hBcAvoQWAP///wC/hRcAvoUWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEREREREREREREREREREREREREBIRIRERERFVFVFVEREREVUVUVURERERVRVRVRERERFVFVFVEREREREREREREWZmVWVWZWZmZmZVZVZVZmZmdlVlVmZmZmZ2VWVWZmZmZnZVZVZmZmY2ZyJmZmZmZnRmZmZmZmZmZjZmZmZmZmYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA">
     <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="widgets/vertical-bar-graph/vertical-bar-graph.css">
     <link rel="stylesheet" href="widgets/speedometer-gauge/speedometer-gauge.css">
     <link rel="stylesheet" href="widgets/card/card.css">
     <link rel="stylesheet" href="widgets/line-graph/line-graph.css">
+    <link rel="stylesheet" href="widgets/2d-pie-chart/2d-pie-chart.css">
 </head>
 <body>
 
     <div class="dashboard-header">
-        <h1>HWInfo Dashboard</h1>
+        <h1>Acer Aspire R3 - 131T</h1>
         <div class="dashboard-controls">
             <button id="refresh-btn" onclick="fetchData()">Refresh</button>
             <label class="auto-refresh-label">
@@ -29,6 +30,7 @@
         <div id="gpu-card"></div>
         <div id="cpu-card"></div>
         <div id="widget-network-download"></div>
+        <div id="storage-card"></div>
     </div>
 
     <script src="widgets/WidgetBase.js"></script>
@@ -36,6 +38,7 @@
     <script src="widgets/speedometer-gauge/speedometer-gauge.js"></script>
     <script src="widgets/card/card.js"></script>
     <script src="widgets/line-graph/line-graph.js"></script>
+    <script src="widgets/2d-pie-chart/2d-pie-chart.js"></script>
     <script src="dashboard.js"></script>
 </body>
 </html>

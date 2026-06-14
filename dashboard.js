@@ -39,22 +39,56 @@ function initWidgets() {
         max: 100
     });
 
+    new LineGraph('#widget-network-download', {
+        name: 'network-download',
+        label: 'Network',
+        reading: 'Current DL rate',
+        unit: 'MBps',
+        min: 0,
+        max: 10
+    });
     
+    new PieChart2D('#widget-drive-d', {
+        label: 'Disk - D: Free Space',
+        reading: 'D: Free Space',
+        unit: 'GB',
+        readingColor: '#D3D3D3',
+        readingLabel: 'Free',
+        remainingColor: '#7393B3',
+        remainingLabel: 'Used',
+        max: 395
+    });
 
     // Initialize all registered widgets
     WidgetRegistry.getAll().forEach(w => w.init());
 }
 
-const networkWidget = new LineGraph('#widget-network-download', {
-    name: 'network-download',
-    label: 'Network',
-    reading: 'Current DL rate',
-    unit: 'MBps',
-    min: 0,
-    max: 10
+const storageWidgetC = new PieChart2D('#widget-drive-d', {
+    label: 'Drive C',
+    reading: 'C: Free Space',
+    unit: 'GB',
+    readingColor: '#D3D3D3',
+    readingLabel: 'Free',
+    remainingColor: '#7393B3',
+    remainingLabel: 'Used',
+    max: 50
 });
 
-networkWidget.init();
+const storageWidgetD = new PieChart2D('#widget-drive-d', {
+    label: 'Drive D',
+    reading: 'D: Free Space',
+    unit: 'GB',
+    readingColor: '#D3D3D3',
+    readingLabel: 'Free',
+    remainingColor: '#7393B3',
+    remainingLabel: 'Used',
+    max: 395
+});
+
+const storageCard = new Card('#storage-card', {title: 'Storage'});
+storageCard.addWidget(storageWidgetC);
+storageCard.addWidget(storageWidgetD);
+storageCard.init();
 
 const gpuUsageWidget = new VerticalBarGraph('#widget-gpu-usage', {
     name: 'gpu-usage',
@@ -74,7 +108,7 @@ const gpuClockWidget = new SpeedometerGauge('#widget-gpu-clock', {
     max: 800
 });
 
-const gpuCard = new Card('#gpu-card', {title: 'GPU Stats'});
+const gpuCard = new Card('#gpu-card', {title: 'Intel HD Graphics'});
 gpuCard.addWidget(gpuUsageWidget);
 gpuCard.addWidget(gpuClockWidget);
 gpuCard.init();
@@ -107,7 +141,7 @@ const cpuClockWidget = new SpeedometerGauge('#widget-cpu-clock', {
     max: 2560
 });
 
-const cpuCard = new Card('#cpu-card', {title: 'CPU Stats'});
+const cpuCard = new Card('#cpu-card', {title: 'Intel Pentium N 3710'});
 cpuCard.addWidget(cpuClockWidget);
 cpuCard.addWidget(cpuUsageWidget);
 cpuCard.addWidget(cpuTempWidget);
