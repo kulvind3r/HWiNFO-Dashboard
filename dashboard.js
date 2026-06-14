@@ -45,6 +45,17 @@ function initWidgets() {
     WidgetRegistry.getAll().forEach(w => w.init());
 }
 
+const networkWidget = new LineGraph('#widget-network-download', {
+    name: 'network-download',
+    label: 'Network',
+    reading: 'Current DL rate',
+    unit: 'MBps',
+    min: 0,
+    max: 10
+});
+
+networkWidget.init();
+
 const gpuUsageWidget = new VerticalBarGraph('#widget-gpu-usage', {
     name: 'gpu-usage',
     label: 'GPU Usage',
