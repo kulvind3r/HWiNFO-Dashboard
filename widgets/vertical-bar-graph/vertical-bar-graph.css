@@ -57,28 +57,28 @@
 
 /* Color classes for the bar */
 .vbg-bar.color-green {
-    background: linear-gradient(to top, #00c853, #69f0ae);
+    background: linear-gradient(to top, #4CAF50, #66BB6A);
 }
 
 .vbg-bar.color-yellow {
-    background: linear-gradient(to top, #ffd600, #ffff52);
+    background: linear-gradient(to top, #FF9800, #FFB74D);
 }
 
 .vbg-bar.color-red {
-    background: linear-gradient(to top, #ff1744, #ff5252);
+    background: linear-gradient(to top, #F44336, #EF5350);
 }
 
 /* Inverted color scheme */
 .vbg-widget.inverted .vbg-bar.color-green {
-    background: linear-gradient(to top, #00c853, #69f0ae);
+    background: linear-gradient(to top, #4CAF50, #66BB6A);
 }
 
 .vbg-widget.inverted .vbg-bar.color-yellow {
-    background: linear-gradient(to top, #ffd600, #ffff52);
+    background: linear-gradient(to top, #FF9800, #FFB74D);
 }
 
 .vbg-widget.inverted .vbg-bar.color-red {
-    background: linear-gradient(to top, #ff1744, #ff5252);
+    background: linear-gradient(to top, #F44336, #EF5350);
 }
 
 /* Grid lines on the bar graph */
