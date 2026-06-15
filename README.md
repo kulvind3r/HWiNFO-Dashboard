@@ -40,18 +40,18 @@ const dashboardConfig = {
 Each widget entry requires:
 - **id** - Unique DOM element ID
 - **type** - Widget type (must match one of the available widgets below)
-- **order** - Display position (optional, widgets without order can be card children)
+- **order** - Display position (widgets part of a card widget **must** not have order number)
 - **config** - Widget-specific configuration object
 
 ## Available Widgets
 
-| Widget | Description | Config Details |
+| Widget | Description | Type Identifer |
 |--------|-------------|----------------|
-| **Vertical Bar Graph** | Color-coded vertical bar for percentage or value metrics (CPU usage, temperature, etc.) | [`vertical-bar-graph.js`](widgets/vertical-bar-graph/vertical-bar-graph.js) |
-| **Line Graph** | Horizontal timeline graph showing the last 60 readings of a sensor value | [`line-graph.js`](widgets/line-graph/line-graph.js) |
-| **Speedometer Gauge** | Arc-style gauge with gradient colors for clock speeds or single values | [`speedometer-gauge.js`](widgets/speedometer-gauge/speedometer-gauge.js) |
-| **2D Pie Chart** | Two-slice pie chart for displaying usage vs remaining (disk space, etc.) | [`2d-pie-chart.js`](widgets/2d-pie-chart/2d-pie-chart.js) |
-| **Card** | Container widget that groups 2, 3 or 4 child widgets into a titled card layout | [`card.js`](widgets/card/card.js) |
+| **Vertical Bar Graph** | Color-coded vertical bar for percentage or value metrics (CPU usage, temperature, etc.) | [`vertical-bar-graph`](widgets/vertical-bar-graph/vertical-bar-graph.js) |
+| **Line Graph** | Horizontal timeline graph showing the last 60 readings of a sensor value | [`line-graph`](widgets/line-graph/line-graph.js) |
+| **Speedometer Gauge** | Arc-style gauge with gradient colors for clock speeds or single values | [`speedometer-gauge`](widgets/speedometer-gauge/speedometer-gauge.js) |
+| **2D Pie Chart** | Two-slice pie chart for displaying usage vs remaining (disk space, etc.) | [`2d-pie-chart`](widgets/2d-pie-chart/2d-pie-chart.js) |
+| **Card** | Container widget that groups 2, 3 or 4 child widgets into a titled card layout | [`card`](widgets/card/card.js) |
 
 Each widget JS file contains detailed documentation on configuration options and usage examples.
 
