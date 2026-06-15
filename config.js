@@ -61,7 +61,7 @@ const dashboardConfig = {
             type: "2d-pie-chart",
             config: {
                 name: "widget-drive-d",
-                label: "Disk - D: Free Space",
+                label: "Drive D",
                 reading: "D: Free Space",
                 unit: "GB",
                 readingColor: "#D3D3D3",

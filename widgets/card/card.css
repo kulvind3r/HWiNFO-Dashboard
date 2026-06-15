@@ -10,12 +10,14 @@
     border-radius: 8px;
     padding: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    min-width: fit-content;
+    width: 100%;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: fit-content;
+    box-sizing: border-box;
 }
 
 .card-title {
@@ -26,16 +28,23 @@
     margin-bottom: 12px;
     border-bottom: 1px solid #2a2a3e;
     text-align: center;
+    width: 100%;
+    align-self: stretch;
 }
 
 .card-content {
     display: flex;
     gap: 16px;
+    width: 100%;
+    align-self: stretch;
+    align-items: center;
 }
 
 .card-widget-slot {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Error state */
@@ -99,4 +108,6 @@
 .card-layout-4 .card-widget-slot {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

@@ -13,8 +13,10 @@
     background: #1a1a2e;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    min-width: fit-content;
-    min-height: fit-content;
+    width: 100%;
+    min-width: 0;
+    height: fit-content;
+    box-sizing: border-box;
 }
 
 .lg-label {
@@ -29,7 +31,8 @@
 
 .lg-graph-container {
     position: relative;
-    width: 400px;
+    width: 100%;
+    min-width: 0;
     height: 200px;
     background: #0f0f1a;
     border-radius: 8px;
