@@ -5,8 +5,8 @@
  * Automatically updates all registered widgets by passing the server data.
  */
 
-// Server configuration - now configurable via UI
-let serverURL = 'http://10.0.0.1:9000/json.json';
+// Server configuration - configurable via UI and config.js
+let serverURL = 'http://localhost:9000/json.json';
 let refreshIntervalSeconds = 3;
 
 /**
@@ -274,6 +274,27 @@ function stopAutoRefresh() {
  * Initialize the dashboard
  */
 function initDashboard() {
+    // Apply configuration from config.js
+    const config = loadConfig();
+    if (config.title) {
+        // Update the <title> tag
+        const titleEl = document.querySelector('title[data-configurable="title"]');
+        if (titleEl) {
+            titleEl.textContent = config.title;
+        }
+        // Update all <h1> elements with configurable attribute
+        document.querySelectorAll('h1[data-configurable="title"]').forEach(el => {
+            el.textContent = config.title;
+        });
+    }
+    if (config.serverUrl) {
+        serverURL = config.serverUrl;
+        const urlInput = document.getElementById('server-url');
+        if (urlInput) {
+            urlInput.value = config.serverUrl;
+        }
+    }
+
     // Initialize widgets from config
     initWidgets();
      

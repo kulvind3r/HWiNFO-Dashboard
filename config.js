@@ -6,6 +6,8 @@
  */
 
 const dashboardConfig = {
+    title: "Acer Aspire R3 - 131T",
+    serverUrl: "http://10.0.0.1:9000/json.json",
     widgets: [
         {
             id: "widget-ram-usage",
