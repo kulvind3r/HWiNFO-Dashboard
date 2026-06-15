@@ -11,7 +11,7 @@
  *     - unit: string (default: '%') - Unit suffix for the value display (e.g., '%', 'Mbps', '°C')
  *     - min: number (default: 0) - Minimum value for the scale (shown on right axis)
  *     - max: number (default: 100) - Maximum value for the scale (shown on right axis)
- *     - reading: string - The reading label to fetch for the main value
+ *     - reading: string - The labelUser for the reading in remotehwinfo Server JSON to fetch for the main value
  *
  * Time Window:
  *     The graph always displays the last 60 values.

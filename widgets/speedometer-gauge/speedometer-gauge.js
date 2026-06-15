@@ -7,7 +7,7 @@
  * - label: string - The label displayed above the gauge
  * - unit: string (default: '') - Unit suffix for the value display
  * - max: number (default: 100) - Maximum value for the scale (min is always 0)
- * - reading: string - The reading label to fetch for the main value
+ * - reading: string - The labelUser for the reading in remotehwinfo Server JSON to fetch for the main value
  *
  * Usage:
  *   const widget = new SpeedometerGauge('#my-container', {

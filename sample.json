@@ -1,0 +1,523 @@
+{
+	"hwinfo":
+	{
+		"signature": 1399412552,
+		"version": 1,
+		"revision": 1,
+		"pollTime": 1781526210,
+		"sensorOffset": 48,
+		"sensorSize": 264,
+		"sensorCount": 16,
+		"readingOffset": 4272,
+		"readingSize": 316,
+		"readingCount": 30,
+		"sensors":
+		[
+			{
+				"entryIndex": 0,
+				"sensorId": 4026532609,
+				"sensorInst": 0,
+				"sensorNameOriginal": "System: Acer Aspire R3-131T",
+				"sensorNameUser": "Memory"
+			},
+			{
+				"entryIndex": 1,
+				"sensorId": 4026532608,
+				"sensorInst": 0,
+				"sensorNameOriginal": "CPU [#0]: Intel Pentium N3710",
+				"sensorNameUser": "CPU"
+			},
+			{
+				"entryIndex": 2,
+				"sensorId": 4026532864,
+				"sensorInst": 0,
+				"sensorNameOriginal": "CPU [#0]: Intel Pentium N3710: DTS",
+				"sensorNameUser": "CPU Temps"
+			},
+			{
+				"entryIndex": 3,
+				"sensorId": 4026542592,
+				"sensorInst": 0,
+				"sensorNameOriginal": "CPU [#0]: Intel Pentium N3710: Enhanced",
+				"sensorNameUser": "GPU"
+			},
+			{
+				"entryIndex": 4,
+				"sensorId": 4026532610,
+				"sensorInst": 0,
+				"sensorNameOriginal": "CPU [#0]: Intel Pentium N3710: C-State Residency",
+				"sensorNameUser": "CPU [#0]: Intel Pentium N3710: C-State Residency"
+			},
+			{
+				"entryIndex": 5,
+				"sensorId": 4026532609,
+				"sensorInst": 1,
+				"sensorNameOriginal": "Memory Timings",
+				"sensorNameUser": "Memory Timings"
+			},
+			{
+				"entryIndex": 6,
+				"sensorId": 4026575872,
+				"sensorInst": 0,
+				"sensorNameOriginal": "ACPI: Acer Aspire R3-131T",
+				"sensorNameUser": "Chasis"
+			},
+			{
+				"entryIndex": 7,
+				"sensorId": 4026532096,
+				"sensorInst": 0,
+				"sensorNameOriginal": "S.M.A.R.T.: CT480BX500SSD1 (1938E19CCB94)",
+				"sensorNameUser": "Drive: S.M.A.R.T"
+			},
+			{
+				"entryIndex": 8,
+				"sensorId": 4026532097,
+				"sensorInst": 0,
+				"sensorNameOriginal": "Drive: CT480BX500SSD1 (1938E19CCB94)",
+				"sensorNameUser": "Drive"
+			},
+			{
+				"entryIndex": 9,
+				"sensorId": 4026579456,
+				"sensorInst": 0,
+				"sensorNameOriginal": "Battery: LGC AC14B8K",
+				"sensorNameUser": "Battery"
+			},
+			{
+				"entryIndex": 10,
+				"sensorId": 4027535360,
+				"sensorInst": 0,
+				"sensorNameOriginal": "RTSS",
+				"sensorNameUser": "RTSS"
+			},
+			{
+				"entryIndex": 11,
+				"sensorId": 4026591744,
+				"sensorInst": 0,
+				"sensorNameOriginal": "Network: RealTek Semiconductor RTL8168/8111 PCI-E Gigabit Ethernet NIC",
+				"sensorNameUser": "Network: RealTek Semiconductor RTL8168/8111 PCI-E Gigabit Ethernet NIC"
+			},
+			{
+				"entryIndex": 12,
+				"sensorId": 4026591744,
+				"sensorInst": 1,
+				"sensorNameOriginal": "Network: Intel Dual Band Wireless-AC 3165",
+				"sensorNameUser": "Network"
+			},
+			{
+				"entryIndex": 13,
+				"sensorId": 4026584268,
+				"sensorInst": 0,
+				"sensorNameOriginal": "Storage",
+				"sensorNameUser": "Storage"
+			},
+			{
+				"entryIndex": 14,
+				"sensorId": 4026584268,
+				"sensorInst": 1,
+				"sensorNameOriginal": "System",
+				"sensorNameUser": "System"
+			},
+			{
+				"entryIndex": 15,
+				"sensorId": 4026535584,
+				"sensorInst": 0,
+				"sensorNameOriginal": "Windows Hardware Errors (WHEA)",
+				"sensorNameUser": "Windows Hardware Errors (WHEA)"
+			}
+		],
+		"readings":
+		[
+			{
+				"entryIndex": 16,
+				"readingType": 8,
+				"sensorIndex": 0,
+				"readingId": 134217731,
+				"labelOriginal": "Physical Memory Used",
+				"labelUser": "Physical Memory Used",
+				"unit": "MB",
+				"value": 3733.000000,
+				"valueMin": 2334.000000,
+				"valueMax": 4996.000000,
+				"valueAvg": 3253.451544
+			},
+			{
+				"entryIndex": 17,
+				"readingType": 8,
+				"sensorIndex": 0,
+				"readingId": 134217732,
+				"labelOriginal": "Physical Memory Available",
+				"labelUser": "Physical Memory Available",
+				"unit": "MB",
+				"value": 4292.000000,
+				"valueMin": 3029.000000,
+				"valueMax": 5691.000000,
+				"valueAvg": 4771.567968
+			},
+			{
+				"entryIndex": 18,
+				"readingType": 8,
+				"sensorIndex": 0,
+				"readingId": 134217733,
+				"labelOriginal": "Physical Memory Load",
+				"labelUser": "RAM Usage",
+				"unit": "%",
+				"value": 46.500000,
+				"valueMin": 29.000000,
+				"valueMax": 62.200000,
+				"valueAvg": 40.492537
+			},
+			{
+				"entryIndex": 19,
+				"readingType": 8,
+				"sensorIndex": 0,
+				"readingId": 134217734,
+				"labelOriginal": "Page File Usage",
+				"labelUser": "Page File Usage",
+				"unit": "%",
+				"value": 5.330753,
+				"valueMin": 0.000000,
+				"valueMax": 9.122562,
+				"valueAvg": 4.513376
+			},
+			{
+				"entryIndex": 20,
+				"readingType": 6,
+				"sensorIndex": 1,
+				"readingId": 100663296,
+				"labelOriginal": "Core 0 Clock",
+				"labelUser": "Core 0 Clock",
+				"unit": "MHz",
+				"value": 879.966720,
+				"valueMin": 479.981848,
+				"valueMax": 2559.903187,
+				"valueAvg": 939.658554
+			},
+			{
+				"entryIndex": 21,
+				"readingType": 6,
+				"sensorIndex": 1,
+				"readingId": 100663297,
+				"labelOriginal": "Core 1 Clock",
+				"labelUser": "Core 1 Clock",
+				"unit": "MHz",
+				"value": 879.966720,
+				"valueMin": 479.981848,
+				"valueMax": 2559.903187,
+				"valueAvg": 942.482951
+			},
+			{
+				"entryIndex": 22,
+				"readingType": 6,
+				"sensorIndex": 1,
+				"readingId": 100663298,
+				"labelOriginal": "Core 2 Clock",
+				"labelUser": "Core 2 Clock",
+				"unit": "MHz",
+				"value": 879.966720,
+				"valueMin": 479.981848,
+				"valueMax": 2559.903187,
+				"valueAvg": 928.259719
+			},
+			{
+				"entryIndex": 23,
+				"readingType": 6,
+				"sensorIndex": 1,
+				"readingId": 100663299,
+				"labelOriginal": "Core 3 Clock",
+				"labelUser": "Core 3 Clock",
+				"unit": "MHz",
+				"value": 879.966720,
+				"valueMin": 479.981848,
+				"valueMax": 2559.903187,
+				"valueAvg": 947.476985
+			},
+			{
+				"entryIndex": 24,
+				"readingType": 7,
+				"sensorIndex": 1,
+				"readingId": 117440517,
+				"labelOriginal": "Total CPU Usage",
+				"labelUser": "CPU Usage",
+				"unit": "%",
+				"value": 2.550000,
+				"valueMin": 0.350000,
+				"valueMax": 100.000000,
+				"valueAvg": 4.232560
+			},
+			{
+				"entryIndex": 25,
+				"readingType": 1,
+				"sensorIndex": 2,
+				"readingId": 16777471,
+				"labelOriginal": "Core Max",
+				"labelUser": "CPU Temp",
+				"unit": "°C",
+				"value": 52.000000,
+				"valueMin": 44.000000,
+				"valueMax": 71.000000,
+				"valueAvg": 50.034399
+			},
+			{
+				"entryIndex": 26,
+				"readingType": 5,
+				"sensorIndex": 3,
+				"readingId": 83886080,
+				"labelOriginal": "CPU Package Power",
+				"labelUser": "CPU Package Power",
+				"unit": "W",
+				"value": 0.741057,
+				"valueMin": 0.677020,
+				"valueMax": 3.664593,
+				"valueAvg": 0.766029
+			},
+			{
+				"entryIndex": 27,
+				"readingType": 6,
+				"sensorIndex": 3,
+				"readingId": 100663296,
+				"labelOriginal": "GPU Clock",
+				"labelUser": "GPU Clock",
+				"unit": "MHz",
+				"value": 400.000000,
+				"valueMin": 0.000000,
+				"valueMax": 700.000000,
+				"valueAvg": 399.986760
+			},
+			{
+				"entryIndex": 28,
+				"readingType": 7,
+				"sensorIndex": 3,
+				"readingId": 117440512,
+				"labelOriginal": "GPU D3D Usage",
+				"labelUser": "GPU D3D Usage",
+				"unit": "%",
+				"value": 0.000000,
+				"valueMin": 0.000000,
+				"valueMax": 56.532740,
+				"valueAvg": 0.002319
+			},
+			{
+				"entryIndex": 29,
+				"readingType": 8,
+				"sensorIndex": 3,
+				"readingId": 134217730,
+				"labelOriginal": "GPU D3D Memory Dynamic",
+				"labelUser": "GPU D3D Memory Dynamic",
+				"unit": "MB",
+				"value": 23.417969,
+				"valueMin": 18.851563,
+				"valueMax": 630.707031,
+				"valueAvg": 23.822691
+			},
+			{
+				"entryIndex": 30,
+				"readingType": 1,
+				"sensorIndex": 6,
+				"readingId": 16777217,
+				"labelOriginal": "Ambient local temp sensor",
+				"labelUser": "Ambient local temp sensor",
+				"unit": "°C",
+				"value": 40.050000,
+				"valueMin": 32.050000,
+				"valueMax": 47.050000,
+				"valueAvg": 37.773511
+			},
+			{
+				"entryIndex": 31,
+				"readingType": 1,
+				"sensorIndex": 7,
+				"readingId": 16777216,
+				"labelOriginal": "Drive Temperature",
+				"labelUser": "Drive Temperature",
+				"unit": "°C",
+				"value": 41.000000,
+				"valueMin": 20.000000,
+				"valueMax": 61.000000,
+				"valueAvg": 39.663845
+			},
+			{
+				"entryIndex": 32,
+				"readingType": 8,
+				"sensorIndex": 7,
+				"readingId": 134217729,
+				"labelOriginal": "Drive Warning",
+				"labelUser": "Drive Warning",
+				"unit": "Yes/No",
+				"value": 0.000000,
+				"valueMin": 0.000000,
+				"valueMax": 0.000000,
+				"valueAvg": 0.000000
+			},
+			{
+				"entryIndex": 33,
+				"readingType": 7,
+				"sensorIndex": 8,
+				"readingId": 117440512,
+				"labelOriginal": "Read Activity",
+				"labelUser": "Read Activity",
+				"unit": "%",
+				"value": 0.000000,
+				"valueMin": 0.000000,
+				"valueMax": 100.000000,
+				"valueAvg": 0.038879
+			},
+			{
+				"entryIndex": 34,
+				"readingType": 7,
+				"sensorIndex": 8,
+				"readingId": 117440513,
+				"labelOriginal": "Write Activity",
+				"labelUser": "Write Activity",
+				"unit": "%",
+				"value": 0.087000,
+				"valueMin": 0.000000,
+				"valueMax": 100.000000,
+				"valueAvg": 0.060482
+			},
+			{
+				"entryIndex": 35,
+				"readingType": 8,
+				"sensorIndex": 8,
+				"readingId": 134217728,
+				"labelOriginal": "Read Rate",
+				"labelUser": "Read Rate",
+				"unit": "MB/s",
+				"value": 0.000000,
+				"valueMin": 0.000000,
+				"valueMax": 183.447000,
+				"valueAvg": 0.025956
+			},
+			{
+				"entryIndex": 36,
+				"readingType": 8,
+				"sensorIndex": 8,
+				"readingId": 134217729,
+				"labelOriginal": "Write Rate",
+				"labelUser": "Write Rate",
+				"unit": "MB/s",
+				"value": 0.015000,
+				"valueMin": 0.000000,
+				"valueMax": 272.147000,
+				"valueAvg": 0.035192
+			},
+			{
+				"entryIndex": 37,
+				"readingType": 8,
+				"sensorIndex": 9,
+				"readingId": 134217728,
+				"labelOriginal": "Remaining Capacity",
+				"labelUser": "Remaining Capacity",
+				"unit": "Wh",
+				"value": 41.557000,
+				"valueMin": 35.674000,
+				"valueMax": 43.654000,
+				"valueAvg": 41.299643
+			},
+			{
+				"entryIndex": 38,
+				"readingType": 8,
+				"sensorIndex": 9,
+				"readingId": 134217729,
+				"labelOriginal": "Charge Level",
+				"labelUser": "Battery Level",
+				"unit": "%",
+				"value": 100.000000,
+				"valueMin": 0.000000,
+				"valueMax": 100.000000,
+				"valueAvg": 99.975059
+			},
+			{
+				"entryIndex": 39,
+				"readingType": 8,
+				"sensorIndex": 9,
+				"readingId": 134217730,
+				"labelOriginal": "",
+				"labelUser": "Charge Rate",
+				"unit": "W",
+				"value": 0.000000,
+				"valueMin": -8.482000,
+				"valueMax": 17.039000,
+				"valueAvg": 0.005094
+			},
+			{
+				"entryIndex": 40,
+				"readingType": 8,
+				"sensorIndex": 9,
+				"readingId": 134217732,
+				"labelOriginal": "Estimated Remaining Time",
+				"labelUser": "Estimated Remaining Time",
+				"unit": "mins",
+				"value": 839.533333,
+				"valueMin": 288.683333,
+				"valueMax": 5039.766667,
+				"valueAvg": 1011.851962
+			},
+			{
+				"entryIndex": 41,
+				"readingType": 8,
+				"sensorIndex": 12,
+				"readingId": 134217730,
+				"labelOriginal": "Current DL rate",
+				"labelUser": "Current DL rate",
+				"unit": "MB/s",
+				"value": 0.000333,
+				"valueMin": 0.000000,
+				"valueMax": 9.133492,
+				"valueAvg": 0.005440
+			},
+			{
+				"entryIndex": 42,
+				"readingType": 8,
+				"sensorIndex": 12,
+				"readingId": 134217731,
+				"labelOriginal": "Current UP rate",
+				"labelUser": "Current UP rate",
+				"unit": "MB/s",
+				"value": 0.000000,
+				"valueMin": 0.000000,
+				"valueMax": 10.843979,
+				"valueAvg": 0.003795
+			},
+			{
+				"entryIndex": 43,
+				"readingType": 8,
+				"sensorIndex": 13,
+				"readingId": 134217728,
+				"labelOriginal": "C: Free Space",
+				"labelUser": "C: Free Space",
+				"unit": "GB",
+				"value": 24.000000,
+				"valueMin": 23.000000,
+				"valueMax": 25.000000,
+				"valueAvg": 24.043912
+			},
+			{
+				"entryIndex": 44,
+				"readingType": 8,
+				"sensorIndex": 13,
+				"readingId": 134217729,
+				"labelOriginal": "D: Free Space",
+				"labelUser": "D: Free Space",
+				"unit": "GB",
+				"value": 83.000000,
+				"valueMin": 75.000000,
+				"valueMax": 84.000000,
+				"valueAvg": 83.179196
+			},
+			{
+				"entryIndex": 45,
+				"readingType": 8,
+				"sensorIndex": 14,
+				"readingId": 134217728,
+				"labelOriginal": "UpTime",
+				"labelUser": "UpTime",
+				"unit": "Days",
+				"value": 64.000000,
+				"valueMin": 0.000000,
+				"valueMax": 132.000000,
+				"valueAvg": 31.542025
+			}
+		]
+	}
+}

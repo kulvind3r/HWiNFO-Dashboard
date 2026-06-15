@@ -9,6 +9,7 @@
  * - label: string - The label displayed above the chart
  * - unit: string (default: '%') - Unit suffix for the value display
  * - max: number (default: 100) - Maximum value for the scale
+ * - reading: string - The labelUser for the reading in remotehwinfo Server JSON to fetch for the main value
  * - readingColor: string - The color for the reading value slice
  * - readingLabel: string - The label for the reading value (shown at bottom)
  * - remainingColor: string - The color for the remaining value slice

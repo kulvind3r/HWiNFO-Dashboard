@@ -12,6 +12,8 @@ A modular web dashboard for visualizing real-time hardware sensor data from HWiN
 
 This project is an addon for **[remotehwinfo](https://github.com/demion/remotehwinfo)** which serves as the JSON data server. The dashboard fetches sensor readings from the remotehwinfo API and displays them using configurable widgets.
 
+It is not very one click plug and play and requires low-to-moderate programming knowledge to customise the config.
+
 ## How It Works
 
 1. **remotehwinfo** runs on the target machine and exposes HWiNFO sensor data as JSON at `/json.json`
@@ -22,8 +24,12 @@ This project is an addon for **[remotehwinfo](https://github.com/demion/remotehw
 ## Getting Started
 
 1. Set up [remotehwinfo](https://github.com/demion/remotehwinfo) on the machine running HWiNFO
-2. Copy [`config.js`](config.js) and edit it with your server URL and widget configuration
+2. Download zip of source code from clone option.
+2. Edit [`config.js`](config.js) and modify to use your server URL and widget configuration.
 3. Open [`dashboard.html`](dashboard.html) in a browser
+
+> Carefully look at [sample.json](./sample.json) and [config.js](./config.js) to understand how values returned by server 
+> are hooked into the dashboard. Everything you need is within these examples.
 
 ## Configuration
 
@@ -42,6 +48,7 @@ Each widget entry requires:
 - **type** - Widget type (must match one of the available widgets below)
 - **order** - Display position (widgets part of a card widget **must** not have order number)
 - **config** - Widget-specific configuration object
+    - **reading** - Most important key in widget config. This is where you store the labelUser string for the value you want to show in widget. See [sample.json](./sample.json) for an exampe of JSON returned by remotehwinfo server.
 
 ## Available Widgets
 

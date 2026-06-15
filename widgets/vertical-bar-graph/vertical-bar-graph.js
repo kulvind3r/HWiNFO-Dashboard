@@ -12,7 +12,7 @@
  *     - min: number (default: 0) - Minimum value for the scale
  *     - max: number (default: 100) - Maximum value for the scale
  *     - showGrid: boolean (default: true) - Whether to show grid lines
- *     - reading: string - The reading label (user or original) to fetch for the main value
+ *     - reading: string - The labelUser for the reading in remotehwinfo Server JSON to fetch for the main value
  *     - leftLabel: string - Label for the left text field (leave empty to hide)
  *     - leftUnit: string - Unit for the left text field
  *     - leftReading: string - The reading label to fetch for the left text field value
