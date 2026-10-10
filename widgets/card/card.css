@@ -101,11 +101,87 @@
 .card-layout-4 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
     gap: 16px;
 }
 
 .card-layout-4 .card-widget-slot {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Layout: 1-row-2-columns - first widget full width, two widgets on 2nd row 50% each */
+.card-layout-1-row-2-columns {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.card-layout-1-row-2-columns .card-row-top {
+    width: 100%;
+}
+
+.card-layout-1-row-2-columns .card-row-top .card-widget-slot {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-layout-1-row-2-columns .card-row-bottom {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+}
+
+.card-layout-1-row-2-columns .card-row-bottom .card-widget-slot {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Layout: Quadrant - 4 widgets in 2x2 grid, 50% width/height each */
+.card-layout-quadrant {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.card-layout-quadrant .card-widget-slot {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Layout: 2 equal columns - 2 widgets side by side, 50% width each, 100% height */
+.card-layout-2-equal-columns {
+    display: flex;
+    gap: 16px;
+}
+
+.card-layout-2-equal-columns .card-widget-slot {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Layout: 2 equal rows - 2 widgets stacked, 100% width each, 50% height */
+.card-layout-2-equal-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.card-layout-2-equal-rows .card-widget-slot {
+    flex: 1;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -17,9 +17,60 @@ const WidgetTypeMap = {
     '2d-pie-chart': PieChart2D,
     'line-graph': LineGraph,
     'speedometer-gauge': SpeedometerGauge,
+    'text-value': TextValue,
     'card': Card
 };
 
+/**
+ * Apply settings from the UI input fields
+ */
+/**
+ * Load settings from localStorage
+ */
+function loadSettings() {
+    const savedUrl = localStorage.getItem('hwinfo-server-url');
+    const savedInterval = localStorage.getItem('hwinfo-refresh-interval');
+    const savedAutoRefresh = localStorage.getItem('hwinfo-auto-refresh');
+     
+    if (savedUrl) {
+        serverURL = savedUrl;
+        const urlInput = document.getElementById('server-url');
+        if (urlInput) {
+            urlInput.value = savedUrl;
+        }
+    }
+     
+    if (savedInterval) {
+        const interval = parseInt(savedInterval, 10);
+        if (interval >= 1) {
+            refreshIntervalSeconds = interval;
+        }
+        const intervalInput = document.getElementById('refresh-interval');
+        if (intervalInput) {
+            intervalInput.value = refreshIntervalSeconds;
+        }
+    }
+     
+    if (savedAutoRefresh !== null) {
+        const autoRefreshCheckbox = document.getElementById('auto-refresh');
+        if (autoRefreshCheckbox) {
+            autoRefreshCheckbox.checked = savedAutoRefresh === 'true';
+        }
+    }
+}
+ 
+/**
+ * Save settings to localStorage
+ */
+function saveSettings() {
+    localStorage.setItem('hwinfo-server-url', serverURL);
+    localStorage.setItem('hwinfo-refresh-interval', refreshIntervalSeconds.toString());
+    const autoRefreshCheckbox = document.getElementById('auto-refresh');
+    if (autoRefreshCheckbox) {
+        localStorage.setItem('hwinfo-auto-refresh', autoRefreshCheckbox.checked.toString());
+    }
+}
+ 
 /**
  * Apply settings from the UI input fields
  */
@@ -40,6 +91,9 @@ function applySettings() {
             refreshIntervalSeconds = interval;
         }
     }
+     
+    // Save settings to localStorage
+    saveSettings();
      
     // Restart auto-refresh if enabled
     const autoRefreshCheckbox = document.getElementById('auto-refresh');
@@ -225,6 +279,16 @@ async function fetchData() {
         }
          
         const data = await response.json();
+        
+        // Round all reading values to nearest integer
+        if (data.hwinfo && data.hwinfo.readings) {
+            data.hwinfo.readings.forEach(reading => {
+                if (typeof reading.value === 'number') {
+                    reading.value = Math.round(reading.value);
+                }
+            });
+        }
+        
         updateDashboard(data);
          
         if (statusEl) {
@@ -274,6 +338,9 @@ function stopAutoRefresh() {
  * Initialize the dashboard
  */
 function initDashboard() {
+    // Load user settings from localStorage first
+    loadSettings();
+     
     // Apply configuration from config.js
     const config = loadConfig();
     if (config.title) {
@@ -287,7 +354,8 @@ function initDashboard() {
             el.textContent = config.title;
         });
     }
-    if (config.serverUrl) {
+    // Only apply config.js serverUrl if no user-saved value exists
+    if (config.serverUrl && !localStorage.getItem('hwinfo-server-url')) {
         serverURL = config.serverUrl;
         const urlInput = document.getElementById('server-url');
         if (urlInput) {
@@ -315,6 +383,7 @@ function initDashboard() {
             } else {
                 stopAutoRefresh();
             }
+            saveSettings();
         });
     }
 }

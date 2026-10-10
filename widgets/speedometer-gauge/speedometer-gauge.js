@@ -6,7 +6,8 @@
  * Configuration Options:
  * - label: string - The label displayed above the gauge
  * - unit: string (default: '') - Unit suffix for the value display
- * - max: number (default: 100) - Maximum value for the scale (min is always 0)
+ * - min: number (default: 0) - Minimum value for the scale
+ * - max: number (default: 100) - Maximum value for the scale
  * - reading: string - The labelUser for the reading in remotehwinfo Server JSON to fetch for the main value
  *
  * Usage:
@@ -25,12 +26,13 @@ class SpeedometerGauge extends WidgetBase {
         this.config = {
             label: config.label || 'Value',
             unit: config.unit || '',
+            min: config.min !== undefined ? config.min : 0,
             max: config.max !== undefined ? config.max : 100,
             reading: config.reading || '',
             ...config
         };
 
-        this.currentValue = 0;
+        this.currentValue = this.config.min;
     }
 
     render() {
@@ -76,7 +78,7 @@ class SpeedometerGauge extends WidgetBase {
                     <!-- Fill arc -->
                     <path id="${this.name}-gauge-fill" class="sg-gauge-arc sg-gauge-arc-fill" stroke="url(#${this.name}-gauge-gradient)" stroke-width="${innerRadiusMax}" />
                     <!-- Min label with unit -->
-                    <text x="${minLabelX.toFixed(1)}" y="${minLabelY.toFixed(1)}" class="sg-min-label" text-anchor="middle">0 ${this.config.unit}</text>
+                    <text x="${minLabelX.toFixed(1)}" y="${minLabelY.toFixed(1)}" class="sg-min-label" text-anchor="middle">${this.config.min} ${this.config.unit}</text>
                     <!-- Max label with unit -->
                     <text x="${maxLabelX.toFixed(1)}" y="${maxLabelY.toFixed(1)}" class="sg-max-label" text-anchor="middle">${this.config.max} ${this.config.unit}</text>
                     <!-- Current value overlayed in center of gauge -->
@@ -89,8 +91,8 @@ class SpeedometerGauge extends WidgetBase {
         // Set up the background arc path
         this._setupArcPath();
 
-        // Initial update to set the gauge to 0
-        this._updateGauge(0);
+        // Initial update to set the gauge to min value
+        this._updateGauge(this.config.min);
     }
 
     _setupArcPath() {
@@ -140,9 +142,10 @@ class SpeedometerGauge extends WidgetBase {
 
         if (!fillPath || !valueEl) return;
 
-         // Clamp value between 0 and max
-        const clampedValue = Math.max(0, Math.min(this.config.max, value));
-        const percent = this.config.max > 0 ? (clampedValue / this.config.max) : 0;
+         // Clamp value between min and max
+        const clampedValue = Math.max(this.config.min, Math.min(this.config.max, value));
+        const range = this.config.max - this.config.min;
+        const percent = range > 0 ? ((clampedValue - this.config.min) / range) : 0;
 
          // Calculate the arc length and set dashoffset
         const { outerRadius, startAngle, endAngle } = this._arcParams;

@@ -1,16 +1,25 @@
 /**
  * Card Widget - A container widget that holds other widgets.
- * 
- * Layout rules:
- * - 2 widgets: Title on top, two widgets side-by-side (50% width each)
- * - 3 widgets: Title on top, first widget on left (50%), other two stacked on right (50% each)
- * - 4 widgets: Title on top, four widgets in quadrant layout (25% each)
+ *
+ * Layout can be explicitly set via config.layout, or auto-selected based on widget count.
+ *
+ * Available layouts:
+ * - '1-row-2-columns': First widget takes 100% width on top row, remaining two widgets on 2nd row at 50% width each (requires 3 widgets)
+ * - 'quadrant': 4 widgets split into a 2x2 grid, each taking 50% horizontal and 50% vertical (requires 4 widgets)
+ * - '2-equal-columns': 2 widgets side-by-side, each taking 50% width and 100% height (requires 2 widgets)
+ * - '2-equal-rows': 2 widgets stacked vertically, each taking 100% width and 50% height (requires 2 widgets)
+ *
+ * Auto-selection (when layout is not specified):
+ * - 2 widgets: '2-equal-columns'
+ * - 3 widgets: '1-row-2-columns'
+ * - 4+ widgets: 'quadrant'
  * - Less than 2 widgets: Shows error message
  */
 class Card extends WidgetBase {
     constructor(containerSelector, config = {}) {
         super(containerSelector, config);
         this.title = config.title || 'Card';
+        this.layout = config.layout || ''; // '1-row-2-columns', 'quadrant', '2-equal-columns', '2-equal-rows', or '' for auto
         this.childWidgets = [];
      }
 
@@ -59,23 +68,85 @@ class Card extends WidgetBase {
 
         const widgetCount = this.childWidgets.length;
 
-        if (widgetCount === 2) {
-            // Layout: Two widgets side-by-side, each 50% width
+        // Determine layout: use explicit layout config if provided, otherwise auto-select based on widget count
+        let layout = this.layout;
+        if (!layout) {
+            if (widgetCount === 2) {
+                layout = '2-equal-columns';
+            } else if (widgetCount === 3) {
+                layout = '1-row-2-columns';
+            } else if (widgetCount >= 4) {
+                layout = 'quadrant';
+            }
+        }
+
+        if (layout === '1-row-2-columns') {
+            // Layout: First widget full width on top row, two widgets on bottom row 50% each
+            contentDiv.className = 'card-content card-layout-1-row-2-columns';
+            
+            const topRow = document.createElement('div');
+            topRow.className = 'card-row-top';
+            const topSlot = document.createElement('div');
+            topSlot.className = 'card-widget-slot';
+            this.childWidgets[0].container = topSlot;
+            topRow.appendChild(topSlot);
+            
+            const bottomRow = document.createElement('div');
+            bottomRow.className = 'card-row-bottom';
+            const bottomLeftSlot = document.createElement('div');
+            bottomLeftSlot.className = 'card-widget-slot';
+            this.childWidgets[1].container = bottomLeftSlot;
+            bottomRow.appendChild(bottomLeftSlot);
+            
+            const bottomRightSlot = document.createElement('div');
+            bottomRightSlot.className = 'card-widget-slot';
+            this.childWidgets[2].container = bottomRightSlot;
+            bottomRow.appendChild(bottomRightSlot);
+            
+            contentDiv.appendChild(topRow);
+            contentDiv.appendChild(bottomRow);
+        } else if (layout === 'quadrant') {
+            // Layout: Four widgets in 2x2 grid, 50% width/height each
+            contentDiv.className = 'card-content card-layout-quadrant';
+            this.childWidgets.slice(0, 4).forEach((widget) => {
+                const widgetContainer = document.createElement('div');
+                widgetContainer.className = 'card-widget-slot';
+                widget.container = widgetContainer;
+                contentDiv.appendChild(widgetContainer);
+            });
+        } else if (layout === '2-equal-columns') {
+            // Layout: Two widgets side-by-side, 50% width each, 100% height
+            contentDiv.className = 'card-content card-layout-2-equal-columns';
+            this.childWidgets.slice(0, 2).forEach((widget) => {
+                const widgetContainer = document.createElement('div');
+                widgetContainer.className = 'card-widget-slot';
+                widget.container = widgetContainer;
+                contentDiv.appendChild(widgetContainer);
+            });
+        } else if (layout === '2-equal-rows') {
+            // Layout: Two widgets stacked, 100% width each, 50% height
+            contentDiv.className = 'card-content card-layout-2-equal-rows';
+            this.childWidgets.slice(0, 2).forEach((widget) => {
+                const widgetContainer = document.createElement('div');
+                widgetContainer.className = 'card-widget-slot';
+                widget.container = widgetContainer;
+                contentDiv.appendChild(widgetContainer);
+            });
+        } else if (widgetCount === 2) {
+            // Fallback: Two widgets side-by-side, each 50% width
             contentDiv.className = 'card-content card-layout-2';
             this.childWidgets.forEach((widget, index) => {
                 const widgetContainer = document.createElement('div');
                 widgetContainer.className = 'card-widget-slot';
-                // Set the container for the child widget
                 widget.container = widgetContainer;
                 contentDiv.appendChild(widgetContainer);
             });
         } else if (widgetCount === 3) {
-            // Layout: First widget on left (50%), other two stacked on right (50% each)
+            // Fallback: First widget on left (50%), other two stacked on right (50% each)
             contentDiv.className = 'card-content card-layout-3';
             
             const leftSlot = document.createElement('div');
             leftSlot.className = 'card-widget-slot card-slot-left';
-            // Set container for first widget
             this.childWidgets[0].container = leftSlot;
             
             const rightContainer = document.createElement('div');
@@ -83,25 +154,22 @@ class Card extends WidgetBase {
             
             const rightTopSlot = document.createElement('div');
             rightTopSlot.className = 'card-widget-slot card-slot-right-top';
-            // Set container for second widget
             this.childWidgets[1].container = rightTopSlot;
             rightContainer.appendChild(rightTopSlot);
             
             const rightBottomSlot = document.createElement('div');
             rightBottomSlot.className = 'card-widget-slot card-slot-right-bottom';
-            // Set container for third widget
             this.childWidgets[2].container = rightBottomSlot;
             rightContainer.appendChild(rightBottomSlot);
             
             contentDiv.appendChild(leftSlot);
             contentDiv.appendChild(rightContainer);
         } else if (widgetCount >= 4) {
-            // Layout: Four widgets in quadrant layout, 25% each
+            // Fallback: Four widgets in quadrant layout, 25% each
             contentDiv.className = 'card-content card-layout-4';
             this.childWidgets.slice(0, 4).forEach((widget, index) => {
                 const widgetContainer = document.createElement('div');
                 widgetContainer.className = 'card-widget-slot';
-                // Set the container for the child widget
                 widget.container = widgetContainer;
                 contentDiv.appendChild(widgetContainer);
             });

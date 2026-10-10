@@ -52,13 +52,31 @@ Each widget entry requires:
 
 ## Available Widgets
 
-| Widget | Description | Type Identifer |
-|--------|-------------|----------------|
-| **Vertical Bar Graph** | Color-coded vertical bar for percentage or value metrics (CPU usage, temperature, etc.) | [`vertical-bar-graph`](widgets/vertical-bar-graph/vertical-bar-graph.js) |
+| Widget | Description | Type Identifier |
+|--------|-------------|-----------------|
+| **Text Value** | Simple label and large text value display with optional boolean (yes/no) mode | [`text-value`](widgets/text-value/text-value.js) |
+| **Vertical Bar Graph** | Color-coded vertical bar for percentage or value metrics (CPU usage, temperature, etc.) with optional left/right text fields | [`vertical-bar-graph`](widgets/vertical-bar-graph/vertical-bar-graph.js) |
 | **Line Graph** | Horizontal timeline graph showing the last 60 readings of a sensor value | [`line-graph`](widgets/line-graph/line-graph.js) |
 | **Speedometer Gauge** | Arc-style gauge with gradient colors for clock speeds or single values | [`speedometer-gauge`](widgets/speedometer-gauge/speedometer-gauge.js) |
 | **2D Pie Chart** | Two-slice pie chart for displaying usage vs remaining (disk space, etc.) | [`2d-pie-chart`](widgets/2d-pie-chart/2d-pie-chart.js) |
-| **Card** | Container widget that groups 2, 3 or 4 child widgets into a titled card layout | [`card`](widgets/card/card.js) |
+| **Card** | Container widget that groups 2, 3, or 4 child widgets into a titled card layout | [`card`](widgets/card/card.js) |
+
+### Card Layouts
+
+The Card widget supports the following layouts (auto-selected based on widget count if not specified):
+
+| Layout | Widgets Required | Description |
+|--------|-----------------|-------------|
+| `2-equal-columns` | 2 | Two widgets side-by-side, each taking 50% width and 100% height |
+| `2-equal-rows` | 2 | Two widgets stacked vertically, each taking 100% width and 50% height |
+| `1-row-2-columns` | 3 | First widget takes 100% width on top row, remaining two widgets on 2nd row at 50% width each |
+| `quadrant` | 4 | Four widgets split into a 2x2 grid, each taking 50% horizontal and 50% vertical |
+
+**Auto-selection (when layout is not specified):**
+- 2 widgets → `2-equal-columns`
+- 3 widgets → `1-row-2-columns`
+- 4+ widgets → `quadrant`
+- Less than 2 widgets → Shows error message
 
 Each widget JS file contains detailed documentation on configuration options and usage examples.
 

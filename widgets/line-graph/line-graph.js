@@ -100,6 +100,21 @@ class LineGraph extends WidgetBase {
         
         this.canvasWidth = rect.width;
         this.canvasHeight = rect.height;
+
+        // Observe container size changes so the canvas resizes when added to a card
+        if (this._resizeObserver) {
+            this._resizeObserver.disconnect();
+        }
+        this._resizeObserver = new ResizeObserver(() => {
+            this._setupCanvas();
+            this._drawGraph();
+        });
+        this._resizeObserver.observe(container);
+    }
+
+    resize() {
+        this._setupCanvas();
+        this._drawGraph();
     }
 
     _drawGraph() {
@@ -248,6 +263,13 @@ class LineGraph extends WidgetBase {
                     valueEl.textContent = `${this.currentValue.toFixed(1)} ${this.config.unit}`;
                 }
             }
+        }
+    }
+
+    destroy() {
+        if (this._resizeObserver) {
+            this._resizeObserver.disconnect();
+            this._resizeObserver = null;
         }
     }
 }
