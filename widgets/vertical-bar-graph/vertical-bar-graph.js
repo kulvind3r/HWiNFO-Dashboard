@@ -112,15 +112,15 @@ class VerticalBarGraph extends WidgetBase {
     _getColorClass(percent) {
         // percent is 0-100
         if (this.config.invertColors) {
-            // Inverted: 0% = red, 50% = yellow, 100% = green
-            if (percent <= 50) {
+            // Inverted: 0% = red, 80% = yellow, 100% = green
+            if (percent <= 80) {
                 return 'color-red';
             } else {
                 return 'color-green';
             }
         } else {
-            // Normal: 0% = green, 50% = yellow, 100% = red
-            if (percent <= 50) {
+            // Normal: 0% = green, 80% = yellow, 100% = red
+            if (percent <= 80) {
                 return 'color-green';
             } else {
                 return 'color-red';
@@ -130,7 +130,7 @@ class VerticalBarGraph extends WidgetBase {
 
     _getIntermediateColor(percent) {
         // For smoother transitions, use yellow in the middle range
-        if (percent >= 35 && percent <= 65) {
+        if (percent >= 50 && percent <= 80) {
             return 'color-yellow';
         }
         return this._getColorClass(percent);
@@ -148,9 +148,9 @@ class VerticalBarGraph extends WidgetBase {
 
         // Determine color class
         let colorClass;
-        if (percent < 35) {
+        if (percent < 50) {
             colorClass = this.config.invertColors ? 'color-red' : 'color-green';
-        } else if (percent <= 65) {
+        } else if (percent <= 80) {
             colorClass = 'color-yellow';
         } else {
             colorClass = this.config.invertColors ? 'color-green' : 'color-red';
