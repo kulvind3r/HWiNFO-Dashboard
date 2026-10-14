@@ -54,7 +54,7 @@ Each widget entry requires:
 
 | Widget | Description | Type Identifier |
 |--------|-------------|-----------------|
-| **Text Value** | Simple label and large text value display with optional boolean (yes/no) mode | [`text-value`](widgets/text-value/text-value.js) |
+| **Text Value** | Simple label and large text value display with optional boolean (yes/no) mode. Supports Offsetting the value. | [`text-value`](widgets/text-value/text-value.js) |
 | **Vertical Bar Graph** | Color-coded vertical bar for percentage or value metrics (CPU usage, temperature, etc.) with optional left/right text fields | [`vertical-bar-graph`](widgets/vertical-bar-graph/vertical-bar-graph.js) |
 | **Line Graph** | Horizontal timeline graph showing the last 60 readings of a sensor value | [`line-graph`](widgets/line-graph/line-graph.js) |
 | **Speedometer Gauge** | Arc-style gauge with gradient colors for clock speeds or single values | [`speedometer-gauge`](widgets/speedometer-gauge/speedometer-gauge.js) |

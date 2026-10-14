@@ -8,6 +8,8 @@
  * - unit: string (default: '') - Unit suffix displayed in smaller font. Use "yes/no" to enable boolean display mode.
  * - reading: string - The label for the reading in remotehwinfo Server JSON to fetch for the main value
  * - prefix: string (default: '') - Prefix displayed before the value
+ * - offset: string (default: '') - Offset for the value, should be a pure numerical number. Code will break otherwise.
+ * - offsetOperation: string (default: '') - Math Operation when using the Offset. Valid Values " + , - , * , / ". Wrong value will cause an OfErr (Offset Error) to be Shown.
  * - yesValueColor: string (default: 'white') - Color for "Yes" value when unit is "yes/no" (options: 'green', 'red'). If only this is set, the opposite color is used for "No".
  * - noValueColor: string (default: 'white') - Color for "No" value when unit is "yes/no" (options: 'green', 'red'). If only this is set, the opposite color is used for "Yes".
  *
@@ -31,6 +33,8 @@ class TextValue extends WidgetBase {
             unit: config.unit || '',
             prefix: config.prefix || '',
             reading: config.reading || '',
+			offsetOperation: config.offsetOperation || '',
+			offset: config.valueOffset || '',
             yesValueColor: config.yesValueColor,
             noValueColor: config.noValueColor,
             ...config
@@ -108,7 +112,20 @@ class TextValue extends WidgetBase {
         if (this.config.reading) {
             const mainReading = this._findReading(readings, this.config.reading);
             if (mainReading) {
-                this.currentValue = mainReading.value;
+				this.currentValue = mainReading.value;
+				if (this.config.offset && this.config.offsetOperation) {
+					if (this.config.offsetOperation === '+') {
+						this.currentValue = mainReading.value + Number(this.config.offset)
+					} else if (this.config.offsetOperation === '-') {
+						this.currentValue = mainReading.value - Number(this.config.offset)
+					} else if (this.config.offsetOperation === '*') {
+						this.currentValue = mainReading.value * Number(this.config.offset)
+					} else if (this.config.offsetOperation === '/') {
+						this.currentValue = mainReading.value / Number(this.config.offset)
+					} else {
+						this.currentValue = "OffErr"
+					}
+				}
             }
         }
 
