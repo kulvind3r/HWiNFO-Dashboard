@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="widgets/line-graph/line-graph.css">
     <link rel="stylesheet" href="widgets/2d-pie-chart/2d-pie-chart.css">
     <link rel="stylesheet" href="widgets/text-value/text-value.css">
+    <link rel="stylesheet" href="healthcheck/healthcheck.css">
 </head>
 <body>
 
@@ -34,7 +35,10 @@
             </label>
         </div>
     </div>
-    <div class="dashboard-grid" id="dashboard">
+    <div class="dashboard-wrapper">
+        <div id="healthcheck-left" class="healthcheck-panel"></div>
+        <div class="dashboard-grid" id="dashboard"></div>
+        <div id="healthcheck-right" class="healthcheck-panel"></div>
     </div>
 
     <script src="widgets/WidgetBase.js"></script>
@@ -45,6 +49,7 @@
     <script src="widgets/2d-pie-chart/2d-pie-chart.js"></script>
     <script src="widgets/text-value/text-value.js"></script>
     <script src="config.js"></script>
+    <script src="healthcheck/healthcheck.js"></script>
     <script src="dashboard.js"></script>
 </body>
 </html>

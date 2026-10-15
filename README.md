@@ -80,6 +80,59 @@ The Card widget supports the following layouts (auto-selected based on widget co
 
 Each widget JS file contains detailed documentation on configuration options and usage examples.
 
+## Healthcheck Module
+
+An optional side panel module that monitors the availability of self-hosted services and displays them in two columns flanking the widget grid.
+
+Enable it by adding a `healthcheck` block to `config.js`:
+
+```javascript
+healthcheck: {
+    enabled: true,
+    checkIntervalSeconds: 30,
+    services: [
+        {
+            id:     "jellyfin",
+            label:  "Jellyfin",
+            url:    "https://jellyfin.homelab.lan",
+            altUrl: "http://192.168.1.100:8096",   // optional fallback URL
+            type:   "http"
+        },
+        {
+            id:    "ssh-server",
+            label: "SSH",
+            host:  "192.168.1.100",
+            port:  22,
+            type:  "ssh",
+            icon:  "🖥️"                            // optional emoji icon override
+        }
+    ]
+}
+```
+
+Set `enabled: false` or remove the block entirely to disable the module with zero impact on the widget grid.
+
+### Service fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `id` | Yes | Unique identifier |
+| `label` | Yes | Display name — also used to auto-fetch the service icon from [dashboard-icons](https://github.com/walkxcode/dashboard-icons) |
+| `type` | Yes | `"http"` for HTTP/HTTPS services, `"ssh"` for TCP port probing |
+| `url` | For `http` | Primary URL to probe |
+| `altUrl` | No | Fallback URL probed if `url` fails. Click opens whichever last succeeded |
+| `host` / `port` | For `ssh` | Host and port for TCP probe |
+| `icon` | No | Emoji to render instead of the auto-fetched icon |
+
+### How probing works
+
+- **HTTP/HTTPS** — Sends a `HEAD` request with a 5-second timeout using `no-cors` mode. Any response (including 4xx) resolves as Online; a refused connection or timeout resolves as Offline.
+- **SSH** — Sends an opaque HTTP request to `host:port`. A TCP-level response (SSH rejecting the HTTP request) resolves as Online; connection refused or timeout resolves as Offline.
+- **Alt URL** — If the primary probe fails and `altUrl` is configured, the fallback is probed. Online if either succeeds.
+- Clicking a service item opens the last successful URL in a new tab.
+
+> If a service shows as Offline despite being reachable, the likely cause is an untrusted self-signed certificate. Open the service URL directly in a browser tab and accept the certificate warning; subsequent probes from the dashboard will then succeed. The permanent fix is to install the local CA certificate into the browser or OS trust store.
+
 ## Widget Architecture
 
 All widgets extend [`WidgetBase`](widgets/WidgetBase.js) and implement:

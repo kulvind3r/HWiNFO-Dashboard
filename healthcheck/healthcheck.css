@@ -1,0 +1,167 @@
+/**
+ * Healthcheck Module Styles
+ *
+ * Scoped entirely to .hc-* classes — zero interference with widget styles.
+ */
+
+/* ─── Layout ─────────────────────────────────────────────────────────────── */
+
+.dashboard-wrapper {
+    display: grid;
+    grid-template-columns: 300px 1fr 300px; /* fixed panel columns, grid fills the rest */
+    align-items: center;                    /* vertically center panels beside the grid */
+    min-height: calc(100vh - 70px);
+}
+
+.healthcheck-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;       /* center list horizontally within the column */
+    padding: 24px 20px;
+    height: 100%;
+}
+
+/* ─── Service List ────────────────────────────────────────────────────────── */
+
+.hc-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;               /* fill the panel so items have consistent width */
+}
+
+/* ─── Service Item ────────────────────────────────────────────────────────── */
+
+.hc-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+    background: #16162a;
+    border: 1px solid #2a2a3e;
+    border-radius: 10px;
+    transition: border-color 0.2s;
+    width: 100%;
+}
+
+.hc-item--clickable {
+    cursor: pointer;
+}
+
+.hc-item--clickable:hover {
+    border-color: #4a4a7e;
+    background: #1c1c35;
+}
+
+/* ─── Icons ───────────────────────────────────────────────────────────────── */
+
+.hc-icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hc-icon--cdn-icon {
+    border-radius: 4px;
+    object-fit: contain;
+}
+
+.hc-icon--fallback {
+    color: #555;
+    width: 28px;
+    height: 28px;
+}
+
+.hc-icon--emoji {
+    font-size: 20px;
+    line-height: 1;
+    width: 28px;
+    text-align: center;
+}
+
+/* ─── Label ───────────────────────────────────────────────────────────────── */
+
+.hc-label {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    color: #d0d0e0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;              /* allow flex shrink + ellipsis to work correctly */
+}
+
+/* ─── Status Badge ────────────────────────────────────────────────────────── */
+
+.hc-badge {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.hc-badge--pending {
+    background: #2a2a3e;
+    color: #888;
+}
+
+.hc-badge--up {
+    background: rgba(105, 240, 174, 0.15);
+    color: #69f0ae;
+    border: 1px solid rgba(105, 240, 174, 0.3);
+}
+
+.hc-badge--down {
+    background: rgba(255, 82, 82, 0.15);
+    color: #ff5252;
+    border: 1px solid rgba(255, 82, 82, 0.3);
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────────────── */
+
+/* Tablet: collapse panels above/below grid */
+@media (max-width: 1200px) {
+    .dashboard-wrapper {
+        grid-template-columns: 1fr;  /* single column, panels stack above/below grid */
+    }
+
+    .healthcheck-panel {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        height: auto;
+        padding: 12px 24px;
+    }
+
+    .hc-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        width: auto;
+    }
+
+    .hc-item {
+        width: 240px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 720px) {
+    .healthcheck-panel {
+        padding: 10px 16px;
+    }
+
+    .hc-item {
+        width: 100%;
+    }
+}

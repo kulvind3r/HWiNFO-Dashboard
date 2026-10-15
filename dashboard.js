@@ -365,6 +365,9 @@ function initDashboard() {
 
     // Initialize widgets from config
     initWidgets();
+
+    // Initialize healthcheck module if enabled in config
+    HealthCheckModule.init(config.healthcheck);
      
     // Fetch initial data
     fetchData();

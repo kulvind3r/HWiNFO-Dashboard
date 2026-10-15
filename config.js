@@ -6,8 +6,82 @@
  */
 
 const dashboardConfig = {
-    title: "Acer Aspire R3 - 131T",
+    title: "Server Stats",
     serverUrl: "http://remotehwinfo.homelab.lan/json.json",
+	
+	/**
+     * Healthcheck Module
+     * Set enabled: false (or remove this block) to disable completely.
+     * 
+     * Service types:
+     *   "http"  — fetch via HEAD request (works for HTTP & HTTPS)
+     *   "ssh"   — opaque TCP probe against host:port
+     *
+     * Optional per-service fields:
+     *   altUrl — fallback URL probed if the primary url fails; click opens whichever last succeeded
+     *   icon   — emoji string; overrides the auto-fetched dashboard-icons CDN icon
+     */
+    healthcheck: {
+        enabled: true,
+        checkIntervalSeconds: 5,
+        services: [
+            {
+                id:    "jellyfin-https",
+                label: "Jellyfin",
+                url:   "https://jellyfin.homelab.lan",
+                type:  "https"
+            },
+			{
+                id:    "navidrome-https",
+                label: "Navidrome",
+                url:   "https://navidrome.homelab.lan",
+                type:  "https"
+            },
+			{
+                id:    "bento-https",
+                label: "BentoPDF",
+                url:   "https://bento.homelab.lan",
+                type:  "https"
+            },
+			{
+                id:    "pigallery2-https",
+                label: "PiGallery2",
+                url:   "https://gallery.homelab.lan",
+                type:  "https"
+            },
+            {
+                id:    "jackett-https",
+                label: "Jackett",
+                url:   "https://jackett.homelab.lan",
+                type:  "https"
+            },
+            {
+                id:    "qbittorrent-https",
+                label: "QbitTorrent",
+                url:   "https://qbittorrent.homelab.lan",
+                type:  "https"
+            },
+            {
+                id:    "vikunja-https",
+                label: "Vikunja",
+                url:   "https://vikunja.homelab.lan",
+                type:  "https"
+            },
+            {
+                id:    "somedl-https",
+                label: "Spotify",
+                url:   "https://somedl.homelab.lan",
+                type:  "https"
+            },
+            {
+                id:    "pairdrop-https",
+                label: "PairDrop",
+                url:   "https://pairdrop.homelab.lan",
+                type:  "https"
+            }
+        ]
+    },
+	
     widgets: [
 		{
             id: "widget-cpu-usage",
@@ -190,7 +264,21 @@ const dashboardConfig = {
                 invertColors: false,
                 unit: "°C",
                 min: 0,
-                max: 70
+                max: 90
+            }
+        },
+		{
+            id: "widget-ambient-temp",
+            type: "vertical-bar-graph",
+            config: {
+                name: "ambient-temp",
+                label: "Ambient Chasis Temp",
+				invertColors: false,
+                reading: "Ambient local temp sensor",
+                unit: "°C",
+				unit: "°C",
+                min: 0,
+                max: 55
             }
         },
 		{
@@ -198,18 +286,18 @@ const dashboardConfig = {
             type: "text-value",
             config: {
                 name: "drive-temp",
-                label: "Disk Drive Temp",
+                label: "SSD Temp",
                 reading: "Drive Temperature",
                 unit: "°C",
             }
         },
 		{
-            id: "widget-ambient-temp",
+            id: "widget-ext-drive-temp",
             type: "text-value",
             config: {
-                name: "ambient-temp",
-                label: "Ambient Chasis Temp",
-                reading: "Ambient local temp sensor",
+                name: "ext-drive-temp",
+                label: "Ext Disk Temp",
+                reading: "Ext Drive Temperature",
                 unit: "°C",
             }
         },
@@ -221,7 +309,7 @@ const dashboardConfig = {
                 name: "temp-card",
                 title: "Temperature"
             },
-            cardWidgets: ["widget-cpu-temp", "widget-drive-temp", "widget-ambient-temp"]
+            cardWidgets: ["widget-cpu-temp", "widget-ambient-temp", "widget-drive-temp", "widget-ext-drive-temp"]
 		},
 		{
 			id: "widget-system-uptime",
@@ -231,6 +319,18 @@ const dashboardConfig = {
 				label: "UpTime",
 				reading: "UpTime",
 				unit: "days"
+			}
+		},
+		{
+			id: "widget-system-power",
+			type: "text-value",
+			config: {
+				name: "system-power",
+				label: "System Power",
+				reading: "CPU Package Power",
+				offsetOperation: "+",
+				offset: "4",
+				unit: "W"
 			}
 		},
         {
@@ -252,33 +352,56 @@ const dashboardConfig = {
             order: 6,
             config: {
                 name: "updtime-card",
-                title: "System UpTime",
-				layout: "2-equal-rows"
+                title: "System UpTime"
             },
-            cardWidgets: ["widget-battery-charge", "widget-system-uptime"]
+            cardWidgets: ["widget-battery-charge", "widget-system-power", "widget-system-uptime"]
 		},
         {
-            id: "widget-network-download",
+            id: "widget-wifi-network-download",
             type: "line-graph",
             config: {
-                name: "network-download",
-                label: "Download",
-                reading: "Current DL rate",
+                name: "wifi-network-download",
+                label: "WiFi - Download",
+                reading: "WiFi - DL rate",
                 unit: "MBps",
                 min: 0,
                 max: 10
             }
         },
 		{
-            id: "widget-network-upload",
+            id: "widget-wifi-network-upload",
             type: "line-graph",
             config: {
-                name: "network-upload",
-                label: "Upload",
-                reading: "Current UP rate",
+                name: "wifi-network-upload",
+                label: "WiFi - Upload",
+                reading: "WiFi - UP rate",
                 unit: "MBps",
                 min: 0,
                 max: 10
+            }
+        },
+		{
+            id: "widget-eth-network-download",
+            type: "line-graph",
+            config: {
+                name: "eth-network-download",
+                label: "Eth - Download",
+                reading: "Eth - DL rate",
+                unit: "MBps",
+                min: 0,
+                max: 100
+            }
+        },
+		{
+            id: "widget-eth-network-upload",
+            type: "line-graph",
+            config: {
+                name: "eth-network-upload",
+                label: "Eth - Upload",
+                reading: "Eth - UP rate",
+                unit: "MBps",
+                min: 0,
+                max: 100
             }
         },
 		{
@@ -289,7 +412,7 @@ const dashboardConfig = {
                 name: "net-activity-card",
                 title: "Network"
             },
-            cardWidgets: ["widget-network-download", "widget-network-upload"]
+            cardWidgets: ["widget-wifi-network-download", "widget-wifi-network-upload", "widget-eth-network-download", "widget-eth-network-upload"]
         },
 		{
             id: "widget-disk-read",
@@ -316,29 +439,38 @@ const dashboardConfig = {
             }
         },
 		{
+            id: "widget-ext-disk-read",
+            type: "line-graph",
+            config: {
+                name: "ext-disk-read",
+                label: "Ext Disk Read",
+                reading: "Ext Drive Read Activity",
+                unit: "%",
+                min: 0,
+                max: 100
+            }
+        },
+		{
+            id: "widget-ext-disk-write",
+            type: "line-graph",
+            config: {
+                name: "ext-disk-write",
+                label: "Ext Disk Write",
+                reading: "Ext Drive Write Activity",
+                unit: "%",
+                min: 0,
+                max: 100
+            }
+        },
+		{
             id: "disk-activity-card",
             type: "card",
-            order: 8,
+            order: 9,
             config: {
                 name: "disk-activity-card",
                 title: "Disk Activity"
             },
-            cardWidgets: ["widget-disk-read", "widget-disk-write"]
-        },
-        {
-            id: "widget-drive-d",
-            type: "2d-pie-chart",
-            config: {
-                name: "widget-drive-d",
-                label: "Drive D",
-                reading: "D: Free Space",
-                unit: "GB",
-                readingColor: "#D3D3D3",
-                readingLabel: "Free",
-                remainingColor: "#7393B3",
-                remainingLabel: "Used",
-                max: 395
-            }
+            cardWidgets: ["widget-disk-read", "widget-disk-write", "widget-ext-disk-read", "widget-ext-disk-write"]
         },
         {
             id: "widget-drive-c",
@@ -356,25 +488,36 @@ const dashboardConfig = {
             }
         },
 		{
-            id: "widget-drive-health",
+            id: "widget-ssd-health",
             type: "text-value",
             config: {
-                name: "drive-health",
-                label: "Drive Health",
+                name: "ssd-health",
+                label: "SSD Health",
                 reading: "Drive Remaining Life",
                 unit: "%",
+            }
+        },
+		{
+            id: "widget-ext-drive-failure",
+            type: "text-value",
+            config: {
+                name: "ext-drive-failure",
+                label: "Ext Drive Failure",
+                reading: "Ext Drive Failure",
+                unit: "Yes/No",
+				yesValueColor: 'red',
+				noValueColor: 'green'
             }
         },
         {
             id: "disk-status-card",
             type: "card",
-            order: 9,
+            order: 8,
             config: {
                 name: "disk-status-card",
-                title: "Disk Usage",
-				layout: "2-columns"
+                title: "Disk Health"
             },
-            cardWidgets: ["widget-drive-c", "widget-drive-d"]
+            cardWidgets: ["widget-drive-c","widget-ssd-health","widget-ext-drive-failure"]
         }
     ]
 };
