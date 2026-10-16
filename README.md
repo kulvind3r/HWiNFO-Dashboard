@@ -128,9 +128,10 @@ Service definitions live in [`server/healthcheck_config.json`](server/healthchec
     "port": 47731,
     "checkIntervalSeconds": 30,
     "services": [
-        { "id": "jellyfin",    "label": "Jellyfin",    "url": "http://localhost:8096" },
-        { "id": "qbittorrent", "label": "qBittorrent", "url": "http://localhost:8080" },
-        { "id": "navidrome",   "label": "Navidrome",   "url": "http://localhost:4533" }
+        { "label": "Jellyfin",    "url": "http://localhost:8096" },
+        { "label": "qBittorrent", "url": "http://localhost:8080" },
+        { "label": "Navidrome",   "url": "http://localhost:4533", "icon": "🎵" },
+        { "label": "SSH",         "type": "ssh", "host": "localhost", "port": 22 }
     ]
 }
 ```
@@ -139,13 +140,20 @@ Service definitions live in [`server/healthcheck_config.json`](server/healthchec
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `label` | Yes | Display name — must be unique. Also used to auto-fetch the service icon from [dashboard-icons](https://github.com/walkxcode/dashboard-icons) |
-| `url` | Yes | URL to probe. Use `localhost:PORT` for services on the same machine |
-| `icon` | No | Emoji string to render instead of the auto-fetched CDN icon |
+| `label` | Yes | Display name — must be unique. Also used as the DOM identifier and to auto-fetch the service icon |
+| `type` | No | Probe type: `http` (default, no need to specify) or `ssh` |
+| `url` | For HTTP | URL to probe. Use `http://localhost:PORT` for services on the same machine |
+| `host` | For SSH | Hostname or IP to connect to (default: `localhost`) |
+| `port` | For SSH | Port to connect to (default: `22`) |
+| `icon` | No | Emoji to render instead of the auto-fetched CDN icon |
 
 ### How probing works
 
-The Python service sends an HTTP `HEAD` request to each service URL with a 5-second timeout. SSL certificate verification is disabled to support self-signed certificates common in homelab environments. Any HTTP response (including 4xx/5xx) is treated as Online; a refused connection or timeout is Offline.
+**HTTP (default):** The Python service sends a `HEAD` request to the service URL with a 5-second timeout. SSL certificate verification is disabled to support self-signed certificates common in homelab environments. Any HTTP response (including 4xx/5xx) is treated as Online; a refused connection or timeout is Offline.
+
+**SSH:** A TCP socket connection is attempted to `host:port`. A successful connection means the SSH daemon is listening — no authentication is performed. A refused connection or timeout is Offline.
+
+Icons are resolved in order: [selfh.st/icons](https://github.com/selfhst/icons) → [dashboard-icons](https://github.com/walkxcode/dashboard-icons) → SVG fallback. Use the `icon` field to override with an emoji for any service not found in either CDN.
 
 ## Server Mode Setup
 
