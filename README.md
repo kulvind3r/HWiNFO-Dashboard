@@ -31,14 +31,47 @@ It is not very one click plug and play and requires low-to-moderate programming 
 > Carefully look at [sample.json](./sample.json) and [config.js](./config.js) to understand how values returned by server 
 > are hooked into the dashboard. Everything you need is within these examples.
 
+## Dashboard Modes
+
+The dashboard operates in one of two modes, set via `mode` in [`config.js`](config.js).
+
+### Client Mode (default)
+
+Open `dashboard.html` directly in a browser (`file://`). No web server needed.
+
+```javascript
+const dashboardConfig = {
+    mode: "client",
+    remotehwinfoUrl: "", // enter via settings panel or set here — saved in localStorage
+    widgets: [ /* ... */ ]
+};
+```
+
+- HWiNFO stats only — no healthcheck panels
+- Set `remotehwinfoUrl` to your remotehwinfo server URL. The value can also be entered via the settings panel and is saved in browser localStorage.
+
+### Server Mode
+
+Served by Caddy. Provides HWiNFO stats **and** live healthcheck panels for local services.
+
+```javascript
+const dashboardConfig = {
+    mode: "server",
+    // remotehwinfoUrl is ignored — data comes from /api/hwinfo proxied by Caddy
+    widgets: [ /* ... */ ]
+};
+```
+
+Requires Caddy + Python + NSSM on the Windows machine running remotehwinfo. See [Server Mode Setup](#server-mode-setup) below.
+
 ## Configuration
 
 Edit [`config.js`](config.js) to customize the dashboard:
 
 ```javascript
 const dashboardConfig = {
-    title: "My Machine",
-    serverUrl: "http://10.0.0.1:9000/json.json",
+    mode: "client",      // "client" | "server"
+    remotehwinfoUrl: "", // client mode only — enter via settings panel or set here
     widgets: [ /* widget definitions */ ]
 };
 ```
@@ -80,58 +113,88 @@ The Card widget supports the following layouts (auto-selected based on widget co
 
 Each widget JS file contains detailed documentation on configuration options and usage examples.
 
-## Healthcheck Module
+## Healthcheck Panels
 
-An optional side panel module that monitors the availability of self-hosted services and displays them in two columns flanking the widget grid.
+Available in **server mode only**. Displays live status of services running locally on the server machine in two columns flanking the widget grid.
 
-Enable it by adding a `healthcheck` block to `config.js`:
+> **Intended use**: monitoring services running on the same Windows machine as remotehwinfo (e.g. Jellyfin, qBittorrent, Navidrome). All probing happens server-side via Python so there are no browser CORS, mixed-content, or self-signed certificate limitations.
+>
+> **Remote / internet services**: technically any HTTP/HTTPS URL works, but this is not the intended use. If the server machine loses internet connectivity all remote checks report Offline regardless of actual service health — making results unreliable. Tools like [Uptime Kuma](https://github.com/louislam/uptime-kuma) are better suited for remote monitoring.
 
-```javascript
-healthcheck: {
-    enabled: true,
-    checkIntervalSeconds: 30,
-    services: [
-        {
-            id:     "jellyfin",
-            label:  "Jellyfin",
-            url:    "https://jellyfin.homelab.lan",
-            altUrl: "http://192.168.1.100:8096",   // optional fallback URL
-            type:   "http"
-        },
-        {
-            id:    "ssh-server",
-            label: "SSH",
-            host:  "192.168.1.100",
-            port:  22,
-            type:  "ssh",
-            icon:  "🖥️"                            // optional emoji icon override
-        }
+Service definitions live in [`server/healthcheck_config.json`](server/healthcheck_config.json):
+
+```json
+{
+    "port": 47731,
+    "checkIntervalSeconds": 30,
+    "services": [
+        { "id": "jellyfin",    "label": "Jellyfin",    "url": "http://localhost:8096" },
+        { "id": "qbittorrent", "label": "qBittorrent", "url": "http://localhost:8080" },
+        { "id": "navidrome",   "label": "Navidrome",   "url": "http://localhost:4533" }
     ]
 }
 ```
-
-Set `enabled: false` or remove the block entirely to disable the module with zero impact on the widget grid.
 
 ### Service fields
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| `id` | Yes | Unique identifier |
-| `label` | Yes | Display name — also used to auto-fetch the service icon from [dashboard-icons](https://github.com/walkxcode/dashboard-icons) |
-| `type` | Yes | `"http"` for HTTP/HTTPS services, `"ssh"` for TCP port probing |
-| `url` | For `http` | Primary URL to probe |
-| `altUrl` | No | Fallback URL probed if `url` fails. Click opens whichever last succeeded |
-| `host` / `port` | For `ssh` | Host and port for TCP probe |
-| `icon` | No | Emoji to render instead of the auto-fetched icon |
+| `label` | Yes | Display name — must be unique. Also used to auto-fetch the service icon from [dashboard-icons](https://github.com/walkxcode/dashboard-icons) |
+| `url` | Yes | URL to probe. Use `localhost:PORT` for services on the same machine |
+| `icon` | No | Emoji string to render instead of the auto-fetched CDN icon |
 
 ### How probing works
 
-- **HTTP/HTTPS** — Sends a `HEAD` request with a 5-second timeout using `no-cors` mode. Any response (including 4xx) resolves as Online; a refused connection or timeout resolves as Offline.
-- **SSH** — Sends an opaque HTTP request to `host:port`. A TCP-level response (SSH rejecting the HTTP request) resolves as Online; connection refused or timeout resolves as Offline.
-- **Alt URL** — If the primary probe fails and `altUrl` is configured, the fallback is probed. Online if either succeeds.
-- Clicking a service item opens the last successful URL in a new tab.
+The Python service sends an HTTP `HEAD` request to each service URL with a 5-second timeout. SSL certificate verification is disabled to support self-signed certificates common in homelab environments. Any HTTP response (including 4xx/5xx) is treated as Online; a refused connection or timeout is Offline.
 
-> If a service shows as Offline despite being reachable, the likely cause is an untrusted self-signed certificate. Open the service URL directly in a browser tab and accept the certificate warning; subsequent probes from the dashboard will then succeed. The permanent fix is to install the local CA certificate into the browser or OS trust store.
+## Server Mode Setup
+
+RemoteHWinfo is a Windows application, so all server-mode components run on the same Windows machine.
+
+### Dependencies
+
+| Tool | Where to get |
+|------|-------------|
+| **Python 3** | [python.org](https://www.python.org/downloads/) — ensure `python.exe` is on PATH |
+| **NSSM** | [nssm.cc](https://nssm.cc/download) — place `nssm.exe` on PATH |
+| **Caddy** | [caddyserver.com](https://caddyserver.com/docs/install) — place `caddy.exe` on PATH |
+
+### Steps
+
+1. **Edit `server/Caddyfile`** — set the two `<CHANGE ME>` values:
+   - The absolute path to your `HWiNFO-Dashboard` folder
+   - The host and port of your remotehwinfo server
+
+2. **Copy `server/Caddyfile`** to the directory where Caddy is installed (or wherever you will run Caddy from).
+
+3. **Edit `server/healthcheck_config.json`** — replace the example services with your actual locally-running services.
+
+4. **Start Caddy** from the directory containing the Caddyfile:
+   ```cmd
+   caddy run --config Caddyfile
+   ```
+
+5. **Install the Python healthcheck service** — run as Administrator:
+   ```cmd
+   server\install-service.bat
+   ```
+
+6. **Set `mode: "server"` in `config.js`** and open the dashboard URL in a browser (e.g. `http://localhost`).
+
+### Managing the healthcheck service
+
+```cmd
+nssm status HWinfoDashboardHealth    :: check running state
+nssm stop   HWinfoDashboardHealth    :: stop
+nssm start  HWinfoDashboardHealth    :: start
+nssm remove HWinfoDashboardHealth confirm  :: uninstall
+```
+
+Logs are written to `server/healthcheck-service.log`.
+
+### Changing the port
+
+Edit `"port"` in `server/healthcheck_config.json` and update the matching port on the `reverse_proxy` line in `server/Caddyfile`, then restart both services.
 
 ## Widget Architecture
 

@@ -139,6 +139,51 @@ body {
     color: #69f0ae;
 }
 
+/* ─── Setup / Error Banner ───────────────────────────────────────────────── */
+
+#dashboard-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 70px);
+    padding: 24px;
+}
+
+#dashboard-banner[hidden] {
+    display: none;
+}
+
+.dashboard-banner-card {
+    background: #16162a;
+    border: 1px solid #2a2a3e;
+    border-radius: 14px;
+    padding: 36px 44px;
+    text-align: center;
+    max-width: 480px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.dashboard-banner-icon {
+    color: #4a4a7e;
+    margin-bottom: 4px;
+}
+
+.dashboard-banner-heading {
+    font-size: 16px;
+    font-weight: 600;
+    color: #d0d0e0;
+}
+
+.dashboard-banner-detail {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+}
+
 /* ─── Responsive breakpoints ─────────────────────────────────────────────── */
 
 /* Tablet: 2-column grid */

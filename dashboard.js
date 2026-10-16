@@ -6,8 +6,12 @@
  */
 
 // Server configuration - configurable via UI and config.js
-let serverURL = 'http://localhost:9000/json.json';
+// Starts empty; populated during initDashboard based on mode + localStorage + config.
+let serverURL = '';
 let refreshIntervalSeconds = 3;
+
+// Tracks the active mode so applySettings can respect it.
+let dashboardMode = 'client';
 
 /**
  * Widget Type Map - Maps widget type strings (directory names) to class names
@@ -79,8 +83,8 @@ function applySettings() {
     const intervalInput = document.getElementById('refresh-interval');
     const statusEl = document.getElementById('dashboard-status');
      
-    // Update server URL
-    if (urlInput && urlInput.value.trim()) {
+    // Update server URL (client mode only — server mode locks URL to /api/hwinfo)
+    if (dashboardMode !== 'server' && urlInput && urlInput.value.trim()) {
         serverURL = urlInput.value.trim();
     }
      
@@ -271,37 +275,100 @@ function initWidgets() {
  */
 async function fetchData() {
     const statusEl = document.getElementById('dashboard-status');
-     
+
+    // Guard: no URL configured yet
+    if (!serverURL) {
+        showBanner(
+            'No HWiNFO server URL configured.',
+            'Enter your remotehwinfo server URL in the settings panel above and click Apply.'
+        );
+        return;
+    }
+
     try {
         const response = await fetch(serverURL);
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(
+                `Server returned HTTP ${response.status}. ` +
+                'Check the URL and ensure remotehwinfo is running.'
+            );
         }
-         
-        const data = await response.json();
-        
+
+        let data;
+        try {
+            data = await response.json();
+        } catch {
+            throw new Error(
+                'Response is not valid JSON. ' +
+                'Check the endpoint URL — it may be returning an HTML error page.'
+            );
+        }
+
+        // Validate expected HWiNFO shape before touching the DOM
+        if (!data?.hwinfo?.readings || !Array.isArray(data.hwinfo.readings)) {
+            throw new Error(
+                'Response does not look like HWiNFO data. ' +
+                'Expected { hwinfo: { readings: [...] } }. Verify the endpoint URL.'
+            );
+        }
+
         // Round all reading values to nearest integer
-        if (data.hwinfo && data.hwinfo.readings) {
-            data.hwinfo.readings.forEach(reading => {
-                if (typeof reading.value === 'number') {
-                    reading.value = Math.round(reading.value);
-                }
-            });
-        }
-        
+        data.hwinfo.readings.forEach(reading => {
+            if (typeof reading.value === 'number') {
+                reading.value = Math.round(reading.value);
+            }
+        });
+
+        hideBanner();
         updateDashboard(data);
-         
+
         if (statusEl) {
             statusEl.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
             statusEl.className = 'dashboard-status success';
         }
     } catch (error) {
         console.error('Failed to fetch data:', error);
+        showBanner('Could not load HWiNFO data.', error.message);
         if (statusEl) {
             statusEl.textContent = `Error: ${error.message}`;
             statusEl.className = 'dashboard-status error';
         }
     }
+}
+
+/**
+ * Show the centered banner and hide the dashboard wrapper.
+ * @param {string} heading - Short headline
+ * @param {string} [detail] - Optional secondary line
+ */
+function showBanner(heading, detail = '') {
+    const banner  = document.getElementById('dashboard-banner');
+    const wrapper = document.querySelector('.dashboard-wrapper');
+    if (banner) {
+        banner.innerHTML = `
+            <div class="dashboard-banner-card">
+                <svg class="dashboard-banner-icon" xmlns="http://www.w3.org/2000/svg"
+                     width="40" height="40" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="1.5"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <p class="dashboard-banner-heading">${heading}</p>
+                ${detail ? `<p class="dashboard-banner-detail">${detail}</p>` : ''}
+            </div>`;
+        banner.removeAttribute('hidden');
+    }
+    if (wrapper) wrapper.hidden = true;
+}
+
+/** Hide the banner and restore the dashboard wrapper. */
+function hideBanner() {
+    const banner  = document.getElementById('dashboard-banner');
+    const wrapper = document.querySelector('.dashboard-wrapper');
+    if (banner)  banner.hidden = true;
+    if (wrapper) wrapper.removeAttribute('hidden');
 }
 
 /**
@@ -338,37 +405,48 @@ function stopAutoRefresh() {
  * Initialize the dashboard
  */
 function initDashboard() {
-    // Load user settings from localStorage first
+    // Load persisted settings from localStorage first
     loadSettings();
-     
+
     // Apply configuration from config.js
     const config = loadConfig();
+    dashboardMode  = config.mode ?? 'client';
+
     if (config.title) {
-        // Update the <title> tag
         const titleEl = document.querySelector('title[data-configurable="title"]');
-        if (titleEl) {
-            titleEl.textContent = config.title;
-        }
-        // Update all <h1> elements with configurable attribute
+        if (titleEl) titleEl.textContent = config.title;
         document.querySelectorAll('h1[data-configurable="title"]').forEach(el => {
             el.textContent = config.title;
         });
     }
-    // Only apply config.js serverUrl if no user-saved value exists
-    if (config.serverUrl && !localStorage.getItem('hwinfo-server-url')) {
-        serverURL = config.serverUrl;
-        const urlInput = document.getElementById('server-url');
-        if (urlInput) {
-            urlInput.value = config.serverUrl;
+
+    if (dashboardMode === 'server') {
+        // Lock the data endpoint to the Caddy proxy path — user has no input here
+        serverURL = '/api/hwinfo';
+
+        // Hide the URL settings row (irrelevant in server mode)
+        const urlInput    = document.getElementById('server-url');
+        const urlSettingEl = urlInput?.closest('.dashboard-settings');
+        if (urlSettingEl) urlSettingEl.style.display = 'none';
+    } else {
+        // Client mode: localStorage (already applied by loadSettings) takes priority,
+        // then fall back to hwInfoDirectUrl from config.js.
+        // If both are empty, fetchData will show the setup banner.
+        if (!serverURL && config.remotehwinfoUrl) {
+            serverURL = config.remotehwinfoUrl;
+            const urlInput = document.getElementById('server-url');
+            if (urlInput) urlInput.value = config.remotehwinfoUrl;
         }
     }
 
     // Initialize widgets from config
     initWidgets();
 
-    // Initialize healthcheck module if enabled in config
-    HealthCheckModule.init(config.healthcheck);
-     
+    // Healthcheck panels are server-mode only (Python service required)
+    if (dashboardMode === 'server') {
+        HealthCheckModule.init();
+    }
+
     // Fetch initial data
     fetchData();
      

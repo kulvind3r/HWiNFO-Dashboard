@@ -7,81 +7,24 @@
 
 const dashboardConfig = {
     title: "Server Stats",
-    serverUrl: "http://remotehwinfo.homelab.lan/json.json",
-	
-	/**
-     * Healthcheck Module
-     * Set enabled: false (or remove this block) to disable completely.
-     * 
-     * Service types:
-     *   "http"  — fetch via HEAD request (works for HTTP & HTTPS)
-     *   "ssh"   — opaque TCP probe against host:port
-     *
-     * Optional per-service fields:
-     *   altUrl — fallback URL probed if the primary url fails; click opens whichever last succeeded
-     *   icon   — emoji string; overrides the auto-fetched dashboard-icons CDN icon
+
+    /**
+     * Dashboard mode:
+     *   "client" — open dashboard.html directly in browser (file://). HWiNFO stats only.
+     *              Set remotehwinfoUrl to your remotehwinfo server URL.
+     *   "server" — served by Caddy. HWiNFO stats + healthcheck panels.
+     *              remotehwinfoUrl is ignored; data is fetched via /api/hwinfo (proxied by Caddy).
+     *              Requires server/Caddyfile + server/healthcheck_server.py running.
      */
-    healthcheck: {
-        enabled: true,
-        checkIntervalSeconds: 5,
-        services: [
-            {
-                id:    "jellyfin-https",
-                label: "Jellyfin",
-                url:   "https://jellyfin.homelab.lan",
-                type:  "https"
-            },
-			{
-                id:    "navidrome-https",
-                label: "Navidrome",
-                url:   "https://navidrome.homelab.lan",
-                type:  "https"
-            },
-			{
-                id:    "bento-https",
-                label: "BentoPDF",
-                url:   "https://bento.homelab.lan",
-                type:  "https"
-            },
-			{
-                id:    "pigallery2-https",
-                label: "PiGallery2",
-                url:   "https://gallery.homelab.lan",
-                type:  "https"
-            },
-            {
-                id:    "jackett-https",
-                label: "Jackett",
-                url:   "https://jackett.homelab.lan",
-                type:  "https"
-            },
-            {
-                id:    "qbittorrent-https",
-                label: "QbitTorrent",
-                url:   "https://qbittorrent.homelab.lan",
-                type:  "https"
-            },
-            {
-                id:    "vikunja-https",
-                label: "Vikunja",
-                url:   "https://vikunja.homelab.lan",
-                type:  "https"
-            },
-            {
-                id:    "somedl-https",
-                label: "Spotify",
-                url:   "https://somedl.homelab.lan",
-                type:  "https"
-            },
-            {
-                id:    "pairdrop-https",
-                label: "PairDrop",
-                url:   "https://pairdrop.homelab.lan",
-                type:  "https"
-            }
-        ]
-    },
-	
+    mode: "client",
+
+    /**
+     * Used in client mode only — ignored in server mode.
+     * Set to your remotehwinfo server URL (e.g. "http://10.0.0.1:9000/json.json").
+     * The value can also be entered via the settings panel and is saved in browser localStorage.
+     */
+    remotehwinfoUrl: "",
+
     widgets: [
 		{
             id: "widget-cpu-usage",

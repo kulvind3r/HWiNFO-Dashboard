@@ -1,0 +1,28 @@
+{
+    "_comment": "HWiNFO Dashboard — Healthcheck Service Configuration",
+
+    "port": 47731,
+    "checkIntervalSeconds": 30,
+
+    "services": [
+        {
+            "label": "Jellyfin",
+            "url":   "http://localhost:8096"
+        },
+        {
+            "label": "qBittorrent",
+            "url":   "http://localhost:8080"
+        },
+        {
+            "label": "Navidrome",
+            "url":   "http://localhost:4533",
+            "icon":  "🎵"
+        },
+        {
+            "label": "SSH",
+            "type":  "ssh",
+            "host":  "localhost",
+            "port":  22
+        }
+    ]
+}

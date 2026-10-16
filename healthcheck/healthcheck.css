@@ -16,7 +16,6 @@
 .healthcheck-panel {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;       /* center list horizontally within the column */
     padding: 24px 20px;
     height: 100%;
@@ -28,8 +27,9 @@
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    width: 100%;               /* fill the panel so items have consistent width */
+    justify-content: space-evenly; /* spread items across full panel height */
+    flex: 1;                       /* fill the panel height */
+    width: 100%;
 }
 
 /* ─── Service Item ────────────────────────────────────────────────────────── */
@@ -46,14 +46,6 @@
     width: 100%;
 }
 
-.hc-item--clickable {
-    cursor: pointer;
-}
-
-.hc-item--clickable:hover {
-    border-color: #4a4a7e;
-    background: #1c1c35;
-}
 
 /* ─── Icons ───────────────────────────────────────────────────────────────── */
 

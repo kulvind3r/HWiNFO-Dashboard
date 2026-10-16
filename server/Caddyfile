@@ -1,0 +1,33 @@
+# HWiNFO Dashboard — Caddy Drop-in Configuration (Server Mode)
+# ---------------------------------------------------------------
+# Prerequisites: Caddy, Python 3, NSSM — see README.md for setup steps.
+#
+# Copy this file to the directory where Caddy is installed (or wherever
+# you intend to run Caddy from), then edit the two values marked <CHANGE ME>:
+#   1. The absolute path to the HWiNFO-Dashboard folder (root directive)
+#   2. The host and port of your remotehwinfo server (reverse_proxy for /api/hwinfo)
+#
+# Run with:  caddy run --config Caddyfile
+
+:80 {
+    # <CHANGE ME> — absolute path to the HWiNFO-Dashboard folder on this machine
+    root * C:\path\to\HWiNFO-Dashboard
+    file_server
+
+    # ── HWiNFO data proxy ──────────────────────────────────────────────────
+    # Proxies /api/hwinfo to the remotehwinfo server, stripping CORS and
+    # mixed-content constraints that would block a direct browser request.
+    #
+    # <CHANGE ME> — replace with your remotehwinfo server host and port
+    handle /api/hwinfo {
+        rewrite * /json.json
+        reverse_proxy localhost:9000
+    }
+
+    # ── Healthcheck proxy ──────────────────────────────────────────────────
+    # Proxies /api/health to the Python healthcheck service running locally.
+    # Port must match the "port" value in healthcheck_config.json (default 47731).
+    handle /api/health {
+        reverse_proxy 127.0.0.1:47731
+    }
+}

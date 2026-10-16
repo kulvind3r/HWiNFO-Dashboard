@@ -1,20 +1,22 @@
 /**
- * Healthcheck Module
+ * Healthcheck Module — Server Mode Thin Client
  *
- * Polls configured services and renders two side panels (left/right) beside
- * the main widget grid. Services are split equally between the panels.
+ * Polls /api/health (served by Caddy, proxied to the Python healthcheck service)
+ * and renders two side panels (left/right) beside the main widget grid.
  *
- * Activated via dashboardConfig.healthcheck in config.js.
- * Fully isolated — shares no state with the widget system.
+ * All service probing happens server-side in healthcheck_server.py.
+ * This module only fetches results and updates the DOM.
+ *
+ * Activated by dashboard.js when config.mode === "server".
  */
 
 const HealthCheckModule = (() => {
 
     // ─── Constants ────────────────────────────────────────────────────────────
 
-    const DEFAULT_CHECK_INTERVAL_MS  = 30_000;
-    const PROBE_TIMEOUT_MS           = 5_000;
-    const DASHBOARD_ICONS_CDN_BASE   = 'https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png';
+    const HEALTH_ENDPOINT          = '/api/health';
+    const DASHBOARD_ICONS_CDN_BASE = 'https://cdn.jsdelivr.net/gh/selfhst/icons/png';
+    const DASHBOARD_ICONS_CDN_FALLBACK = 'https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png';
 
     const Status = Object.freeze({
         PENDING: 'pending',
@@ -24,32 +26,51 @@ const HealthCheckModule = (() => {
 
     // ─── State ────────────────────────────────────────────────────────────────
 
-    let pollTimer = null;
-
-    // Tracks the last URL that successfully probed for each service id.
-    // Read at click-time so it always reflects the most recent probe result.
-    const lastSuccessfulUrls = {};
+    let pollTimer      = null;
+    let panelsRendered = false;
 
     // ─── Public API ───────────────────────────────────────────────────────────
 
-    function init(healthcheckConfig) {
-        if (!healthcheckConfig?.enabled) return;
-
-        const services = healthcheckConfig.services ?? [];
-        if (services.length === 0) return;
-
-        const intervalMs = (healthcheckConfig.checkIntervalSeconds ?? 30) * 1000;
-
-        renderPanels(services);
-        probeAll(services);
-
-        pollTimer = setInterval(() => probeAll(services), intervalMs);
+    function init() {
+        fetchAndRender();
     }
 
     function destroy() {
         if (pollTimer) {
             clearInterval(pollTimer);
             pollTimer = null;
+        }
+        panelsRendered = false;
+    }
+
+    // ─── Data Fetching ────────────────────────────────────────────────────────
+
+    async function fetchAndRender() {
+        let payload;
+        try {
+            const response = await fetch(HEALTH_ENDPOINT);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            payload = await response.json();
+        } catch (err) {
+            console.error('[HealthCheck] Failed to fetch health status:', err);
+            return;
+        }
+
+        const services = payload?.services;
+        if (!Array.isArray(services)) return;
+
+        if (!panelsRendered) {
+            renderPanels(services);
+            panelsRendered = true;
+
+            // Start polling at the interval the server reports
+            const intervalMs = (payload.checkIntervalSeconds ?? 30) * 1000;
+            pollTimer = setInterval(fetchAndRender, intervalMs);
+        } else {
+            // Panels already built — just refresh the status badges
+            for (const svc of services) {
+                updateServiceStatus(svc.label, svc.status ?? Status.DOWN);
+            }
         }
     }
 
@@ -58,10 +79,9 @@ const HealthCheckModule = (() => {
     function renderPanels(services) {
         const leftPanel  = document.getElementById('healthcheck-left');
         const rightPanel = document.getElementById('healthcheck-right');
-
         if (!leftPanel || !rightPanel) return;
 
-        const midpoint    = Math.ceil(services.length / 2);
+        const midpoint      = Math.ceil(services.length / 2);
         const leftServices  = services.slice(0, midpoint);
         const rightServices = services.slice(midpoint);
 
@@ -72,35 +92,27 @@ const HealthCheckModule = (() => {
     function buildPanel(services) {
         const list = document.createElement('ul');
         list.className = 'hc-list';
-
         for (const service of services) {
             list.appendChild(buildServiceItem(service));
         }
-
         return list;
     }
 
     function buildServiceItem(service) {
         const item = document.createElement('li');
-        item.id = `hc-item-${service.id}`;
+        item.id = `hc-item-${deriveIconSlug(service.label)}`;
 
-        const isNavigable = !!(service.url || service.altUrl);
-        item.className = isNavigable ? 'hc-item hc-item--clickable' : 'hc-item';
+        item.className = 'hc-item';
 
-        if (isNavigable) {
-            item.addEventListener('click', () => {
-                const target = lastSuccessfulUrls[service.id] ?? service.url ?? service.altUrl;
-                if (target) window.open(target, '_blank', 'noopener,noreferrer');
-            });
-        }
-
-        const icon  = buildIcon(service);
-        const label = buildLabel(service.label);
-        const badge = buildStatusBadge(Status.PENDING);
-
-        item.append(icon, label, badge);
+        item.append(
+            buildIcon(service),
+            buildLabel(service.label),
+            buildStatusBadge(service.status ?? Status.PENDING)
+        );
         return item;
     }
+
+    // ─── Icon Helpers ─────────────────────────────────────────────────────────
 
     /**
      * Derives a dashboard-icons CDN slug from the service label.
@@ -116,7 +128,7 @@ const HealthCheckModule = (() => {
     function buildIcon(service) {
         if (service.icon) {
             const span = document.createElement('span');
-            span.className = 'hc-icon hc-icon--emoji';
+            span.className   = 'hc-icon hc-icon--emoji';
             span.textContent = service.icon;
             return span;
         }
@@ -124,35 +136,42 @@ const HealthCheckModule = (() => {
         const slug = deriveIconSlug(service.label);
         const img  = document.createElement('img');
         img.className = 'hc-icon hc-icon--cdn-icon';
-        img.width     = 20;
-        img.height    = 20;
+        img.width     = 28;
+        img.height    = 28;
         img.alt       = '';
         img.src       = `${DASHBOARD_ICONS_CDN_BASE}/${slug}.png`;
-        img.onerror   = () => img.replaceWith(buildFallbackIcon());
-
+        img.onerror   = () => {
+            // Try walkxcode CDN as secondary fallback
+            const fallbackImg = document.createElement('img');
+            fallbackImg.className = img.className;
+            fallbackImg.width     = 28;
+            fallbackImg.height    = 28;
+            fallbackImg.alt       = '';
+            fallbackImg.src       = `${DASHBOARD_ICONS_CDN_FALLBACK}/${slug}.png`;
+            fallbackImg.onerror   = () => fallbackImg.replaceWith(buildFallbackIcon());
+            img.replaceWith(fallbackImg);
+        };
         return img;
     }
 
     function buildFallbackIcon() {
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttribute('class', 'hc-icon hc-icon--fallback');
-        svg.setAttribute('width', '20');
-        svg.setAttribute('height', '20');
+        svg.setAttribute('width', '28');
+        svg.setAttribute('height', '28');
         svg.setAttribute('viewBox', '0 0 24 24');
         svg.setAttribute('fill', 'none');
         svg.setAttribute('stroke', 'currentColor');
         svg.setAttribute('stroke-width', '2');
         svg.setAttribute('stroke-linecap', 'round');
         svg.setAttribute('stroke-linejoin', 'round');
-
-        // server rack icon (two horizontal rect stacks)
+        // Server rack icon
         svg.innerHTML = `
             <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
             <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
             <line x1="6" y1="6" x2="6.01" y2="6"/>
             <line x1="6" y1="18" x2="6.01" y2="18"/>
         `;
-
         return svg;
     }
 
@@ -181,82 +200,13 @@ const HealthCheckModule = (() => {
 
     // ─── DOM Updates ──────────────────────────────────────────────────────────
 
-    function updateServiceStatus(serviceId, status) {
-        const item = document.getElementById(`hc-item-${serviceId}`);
+    function updateServiceStatus(label, status) {
+        const item = document.getElementById(`hc-item-${deriveIconSlug(label)}`);
         if (!item) return;
-
         const badge = item.querySelector('.hc-badge');
         if (!badge) return;
-
         badge.className   = `hc-badge hc-badge--${status}`;
         badge.textContent = badgeText(status);
-    }
-
-    // ─── Probing ──────────────────────────────────────────────────────────────
-
-    async function probeAll(services) {
-        await Promise.allSettled(services.map(probeService));
-    }
-
-    async function probeService(service) {
-        // Try primary URL / SSH first
-        const primaryStatus = service.type === 'ssh'
-            ? await probeSsh(service)
-            : await probeHttp(service);
-
-        if (primaryStatus === Status.UP) {
-            lastSuccessfulUrls[service.id] = service.url ?? null;
-            updateServiceStatus(service.id, Status.UP);
-            return;
-        }
-
-        // Fall back to altUrl if defined
-        if (service.altUrl) {
-            const altStatus = await probeHttp({ ...service, url: service.altUrl });
-            if (altStatus === Status.UP) {
-                lastSuccessfulUrls[service.id] = service.altUrl;
-                updateServiceStatus(service.id, Status.UP);
-                return;
-            }
-        }
-
-        lastSuccessfulUrls[service.id] = null;
-        updateServiceStatus(service.id, Status.DOWN);
-    }
-
-    async function probeHttp(service) {
-        if (!service.url) return Status.DOWN;
-
-        try {
-            await fetch(service.url, {
-                method: 'HEAD',
-                mode:   'no-cors',
-                signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
-            });
-            return Status.UP;
-        } catch {
-            return Status.DOWN;
-        }
-    }
-
-    /**
-     * SSH probe via opaque HTTP fetch against host:port.
-     * SSH will reject the HTTP request but the TCP handshake succeeds,
-     * so the browser sees a network-level response (opaque) → UP.
-     * A refused/timed-out connection throws TypeError → DOWN.
-     */
-    async function probeSsh(service) {
-        if (!service.host || !service.port) return Status.DOWN;
-
-        try {
-            await fetch(`http://${service.host}:${service.port}`, {
-                mode:   'no-cors',
-                signal: AbortSignal.timeout(PROBE_TIMEOUT_MS),
-            });
-            return Status.UP;
-        } catch {
-            return Status.DOWN;
-        }
     }
 
     // ─── Exports ──────────────────────────────────────────────────────────────
