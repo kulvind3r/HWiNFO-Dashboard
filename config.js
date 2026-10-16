@@ -229,18 +229,8 @@ const dashboardConfig = {
             type: "text-value",
             config: {
                 name: "drive-temp",
-                label: "SSD Temp",
+                label: "Internal Drive Temp",
                 reading: "Drive Temperature",
-                unit: "°C",
-            }
-        },
-		{
-            id: "widget-ext-drive-temp",
-            type: "text-value",
-            config: {
-                name: "ext-drive-temp",
-                label: "Ext Disk Temp",
-                reading: "Ext Drive Temperature",
                 unit: "°C",
             }
         },
@@ -250,9 +240,10 @@ const dashboardConfig = {
             order: 5,
             config: {
                 name: "temp-card",
-                title: "Temperature"
+                title: "Temperature",
+				layout: "2-columns-1-row"
             },
-            cardWidgets: ["widget-cpu-temp", "widget-ambient-temp", "widget-drive-temp", "widget-ext-drive-temp"]
+            cardWidgets: ["widget-cpu-temp", "widget-ambient-temp", "widget-drive-temp"]
 		},
 		{
 			id: "widget-system-uptime",
@@ -358,11 +349,21 @@ const dashboardConfig = {
             cardWidgets: ["widget-wifi-network-download", "widget-wifi-network-upload", "widget-eth-network-download", "widget-eth-network-upload"]
         },
 		{
+            id: "widget-ssd-health",
+            type: "text-value",
+            config: {
+                name: "ssd-health",
+                label: "Remaining Life",
+                reading: "Drive Remaining Life",
+                unit: "%",
+            }
+        },
+		{
             id: "widget-disk-read",
             type: "line-graph",
             config: {
                 name: "disk-read",
-                label: "Disk Read",
+                label: "Read Activity",
                 reading: "Read Activity",
                 unit: "%",
                 min: 0,
@@ -374,82 +375,11 @@ const dashboardConfig = {
             type: "line-graph",
             config: {
                 name: "disk-write",
-                label: "Disk Write",
+                label: "Write Activity",
                 reading: "Write Activity",
                 unit: "%",
                 min: 0,
                 max: 100
-            }
-        },
-		{
-            id: "widget-ext-disk-read",
-            type: "line-graph",
-            config: {
-                name: "ext-disk-read",
-                label: "Ext Disk Read",
-                reading: "Ext Drive Read Activity",
-                unit: "%",
-                min: 0,
-                max: 100
-            }
-        },
-		{
-            id: "widget-ext-disk-write",
-            type: "line-graph",
-            config: {
-                name: "ext-disk-write",
-                label: "Ext Disk Write",
-                reading: "Ext Drive Write Activity",
-                unit: "%",
-                min: 0,
-                max: 100
-            }
-        },
-		{
-            id: "disk-activity-card",
-            type: "card",
-            order: 9,
-            config: {
-                name: "disk-activity-card",
-                title: "Disk Activity"
-            },
-            cardWidgets: ["widget-disk-read", "widget-disk-write", "widget-ext-disk-read", "widget-ext-disk-write"]
-        },
-        {
-            id: "widget-drive-c",
-            type: "2d-pie-chart",
-            config: {
-                name: "widget-drive-c",
-                label: "Drive C",
-                reading: "C: Free Space",
-                unit: "GB",
-                readingColor: "#D3D3D3",
-                readingLabel: "Free",
-                remainingColor: "#7393B3",
-                remainingLabel: "Used",
-                max: 50
-            }
-        },
-		{
-            id: "widget-ssd-health",
-            type: "text-value",
-            config: {
-                name: "ssd-health",
-                label: "SSD Health",
-                reading: "Drive Remaining Life",
-                unit: "%",
-            }
-        },
-		{
-            id: "widget-ext-drive-failure",
-            type: "text-value",
-            config: {
-                name: "ext-drive-failure",
-                label: "Ext Drive Failure",
-                reading: "Ext Drive Failure",
-                unit: "Yes/No",
-				yesValueColor: 'red',
-				noValueColor: 'green'
             }
         },
         {
@@ -458,9 +388,115 @@ const dashboardConfig = {
             order: 8,
             config: {
                 name: "disk-status-card",
-                title: "Disk Health"
+                title: "Disk Status"
             },
-            cardWidgets: ["widget-drive-c","widget-ssd-health","widget-ext-drive-failure"]
+            cardWidgets: ["widget-ssd-health","widget-disk-read","widget-disk-write"]
+        },
+		{
+            id: "widget-drive-c",
+            type: "text-value",
+            config: {
+                name: "widget-drive-c",
+                label: "Drive C Free Space",
+                reading: "C: Free Space",
+                unit: "GB",
+            }
+        },
+		{
+            id: "widget-drive-d",
+            type: "2d-pie-chart",
+            config: {
+                name: "widget-drive-d",
+                label: "Drive D",
+                reading: "D: Free Space",
+                unit: "GB",
+                readingColor: "#D3D3D3",
+                readingLabel: "Free",
+                remainingColor: "#7393B3",
+                remainingLabel: "Used",
+                max: 395
+            }
+        },
+		{
+            id: "widget-drive-e",
+            type: "2d-pie-chart",
+            config: {
+                name: "widget-drive-e",
+                label: "Drive E",
+                reading: "E: Free Space",
+                unit: "GB",
+                readingColor: "#D3D3D3",
+                readingLabel: "Free",
+                remainingColor: "#7393B3",
+                remainingLabel: "Used",
+                max: 465
+            }
+        },
+		{
+            id: "storage-status-card",
+            type: "card",
+            order: 9,
+            config: {
+                name: "storage-status-card",
+                title: "Storage Space"
+            },
+            cardWidgets: ["widget-drive-c", "widget-drive-d", "widget-drive-e"]
         }
+		//,{
+            // id: "widget-ext-drive-failure",
+            // type: "text-value",
+            // config: {
+                // name: "ext-drive-failure",
+                // label: "Ext Drive Failure",
+                // reading: "Ext Drive Failure",
+                // unit: "Yes/No",
+				// yesValueColor: 'red',
+				// noValueColor: 'green'
+            // }
+        // },
+		// {
+            // id: "widget-ext-drive-temp",
+            // type: "text-value",
+            // config: {
+                // name: "ext-drive-temp",
+                // label: "Ext Disk Temp",
+                // reading: "Ext Drive Temperature",
+                // unit: "°C",
+            // }
+        // },
+		// {
+            // id: "widget-ext-disk-read",
+            // type: "line-graph",
+            // config: {
+                // name: "ext-disk-read",
+                // label: "Ext Disk Read",
+                // reading: "Ext Drive Read Activity",
+                // unit: "%",
+                // min: 0,
+                // max: 100
+            // }
+        // },
+		// {
+            // id: "widget-ext-disk-write",
+            // type: "line-graph",
+            // config: {
+                // name: "ext-disk-write",
+                // label: "Ext Disk Write",
+                // reading: "Ext Drive Write Activity",
+                // unit: "%",
+                // min: 0,
+                // max: 100
+            // }
+        // },
+		// {
+            // id: "ext-disk-status-card",
+            // type: "card",
+            // order: 10,
+            // config: {
+                // name: "ext-disk-status-card",
+                // title: "Ext Disk Status"
+            // },
+            // cardWidgets: ["widget-ext-drive-failure", "widget-ext-drive-temp", "widget-ext-disk-read", "widget-ext-disk-write",]
+        // }
     ]
 };

@@ -4,7 +4,7 @@
  * Handles layout for 2, 3, and 4 widget configurations.
  */
 
-.card-widget {
+ .card-widget {
     background: #16162a;
     border: 1px solid #2a2a3e;
     border-radius: 8px;
@@ -138,6 +138,39 @@
 
 .card-layout-1-row-2-columns .card-row-bottom .card-widget-slot {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Layout: 2-columns-1-row - first two widgets side-by-side 50% each, third widget full width on 2nd row */
+.card-layout-2-columns-1-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.card-layout-2-columns-1-row .card-row-top {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+}
+
+.card-layout-2-columns-1-row .card-row-top .card-widget-slot {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-layout-2-columns-1-row .card-row-bottom {
+    width: 100%;
+}
+
+.card-layout-2-columns-1-row .card-row-bottom .card-widget-slot {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;

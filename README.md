@@ -103,6 +103,7 @@ The Card widget supports the following layouts (auto-selected based on widget co
 | `2-equal-columns` | 2 | Two widgets side-by-side, each taking 50% width and 100% height |
 | `2-equal-rows` | 2 | Two widgets stacked vertically, each taking 100% width and 50% height |
 | `1-row-2-columns` | 3 | First widget takes 100% width on top row, remaining two widgets on 2nd row at 50% width each |
+| `2-columns-1-row` | 3 | First two widgets in top row at 50% width each, 2nd widget takes 100% width in bottom row |
 | `quadrant` | 4 | Four widgets split into a 2x2 grid, each taking 50% horizontal and 50% vertical |
 
 **Auto-selection (when layout is not specified):**

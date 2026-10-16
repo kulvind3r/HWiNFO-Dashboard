@@ -5,6 +5,7 @@
  *
  * Available layouts:
  * - '1-row-2-columns': First widget takes 100% width on top row, remaining two widgets on 2nd row at 50% width each (requires 3 widgets)
+ * - '2-columns-1-row': First two widgets on top row at 50% width each, remaining widget takes 100% width on 2nd row (requires 3 widgets)
  * - 'quadrant': 4 widgets split into a 2x2 grid, each taking 50% horizontal and 50% vertical (requires 4 widgets)
  * - '2-equal-columns': 2 widgets side-by-side, each taking 50% width and 100% height (requires 2 widgets)
  * - '2-equal-rows': 2 widgets stacked vertically, each taking 100% width and 50% height (requires 2 widgets)
@@ -19,7 +20,7 @@ class Card extends WidgetBase {
     constructor(containerSelector, config = {}) {
         super(containerSelector, config);
         this.title = config.title || 'Card';
-        this.layout = config.layout || ''; // '1-row-2-columns', 'quadrant', '2-equal-columns', '2-equal-rows', or '' for auto
+        this.layout = config.layout || ''; // '1-row-2-columns', '2-columns-1-row', 'quadrant', '2-equal-columns', '2-equal-rows', or '' for auto
         this.childWidgets = [];
      }
 
@@ -102,6 +103,31 @@ class Card extends WidgetBase {
             bottomRightSlot.className = 'card-widget-slot';
             this.childWidgets[2].container = bottomRightSlot;
             bottomRow.appendChild(bottomRightSlot);
+            
+            contentDiv.appendChild(topRow);
+            contentDiv.appendChild(bottomRow);
+        } else if (layout === '2-columns-1-row') {
+            // Layout: First two widgets side-by-side on top row 50% each, third widget full width on bottom row
+            contentDiv.className = 'card-content card-layout-2-columns-1-row';
+            
+            const topRow = document.createElement('div');
+            topRow.className = 'card-row-top';
+            const topLeftSlot = document.createElement('div');
+            topLeftSlot.className = 'card-widget-slot';
+            this.childWidgets[0].container = topLeftSlot;
+            topRow.appendChild(topLeftSlot);
+            
+            const topRightSlot = document.createElement('div');
+            topRightSlot.className = 'card-widget-slot';
+            this.childWidgets[1].container = topRightSlot;
+            topRow.appendChild(topRightSlot);
+            
+            const bottomRow = document.createElement('div');
+            bottomRow.className = 'card-row-bottom';
+            const bottomSlot = document.createElement('div');
+            bottomSlot.className = 'card-widget-slot';
+            this.childWidgets[2].container = bottomSlot;
+            bottomRow.appendChild(bottomSlot);
             
             contentDiv.appendChild(topRow);
             contentDiv.appendChild(bottomRow);
